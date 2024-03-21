@@ -1,19 +1,11 @@
-﻿@page "/counter"
+﻿@page "/decks"
 @rendermode InteractiveServer
+@inject NavigationManager _nav
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Decks</PageTitle>
 
-<h1>Counter</h1>
+<h1>Decks</h1>
 
-<p role="status">Current count: @currentCount</p>
+<!-- Load user decks here -->
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
-@code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-}
+<button class="btn btn-primary" onclick='@(()=>_nav.NavigateTo("/sets"))'>Create a new deck.</button>
