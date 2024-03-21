@@ -47,4 +47,8 @@ public class Service
         return true;
     }
 
+    public List<Set> GetSets()
+    {
+        return _context.Sets.ToList();
+    }
 }
