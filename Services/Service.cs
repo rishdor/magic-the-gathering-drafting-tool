@@ -27,7 +27,7 @@ public class Service
     {
         return await _context.Colors.ToListAsync();
     }
-        public async Task<string> RegisterUser(User user)
+    public async Task<string> RegisterUser(User user)
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser != null)
@@ -52,6 +52,17 @@ public class Service
         {
             return "failure";
         }
+    }
+
+    public async Task<string> LoginUser(User user)
+    {
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+        if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
+        {
+            return "failure";
+        }
+
+        return "success";
     }
     
     public List<Set> GetSets()
