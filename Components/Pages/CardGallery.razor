@@ -1,0 +1,45 @@
+@page "/cards"
+@using magick.Models
+@using magick.Services
+@inject Service service
+
+
+<div>
+    <input @bind="searchTerm" placeholder="Search cards..." />
+    <select @bind="filterOption">
+        <option value="">All</option>
+        <!-- filter options here -->
+    </select>
+</div>
+
+@if (cards == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div>
+    @foreach (var card in cards)
+    {
+        <CardComponent card="card" />
+    }
+</div>
+}
+
+@code {
+    private string searchTerm = "";
+    private string filterOption = "";
+    private List<Card>? cards;
+    private int pageNumber = 1;
+    private const int pageSize = 50;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCards();
+    }
+
+    private async Task LoadCards()
+    {
+        cards = await service.GetCards(searchTerm, filterOption, pageNumber, pageSize);
+    }
+}
