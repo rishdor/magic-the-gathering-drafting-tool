@@ -13,20 +13,7 @@ public class Service
         _context = context;
     }
 
-    public async Task<User?> GetUser(string username)
-    {
-        User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-        return user;
-    }
-
-    public async Task<List<Card>> GetCards()
-    {
-        return await _context.Cards.ToListAsync();
-    }
-    public async Task<List<Color>> GetColors()
-    {
-        return await _context.Colors.ToListAsync();
-    }
+    //USERS
     public async Task<string> RegisterUser(User user)
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
@@ -65,8 +52,34 @@ public class Service
         return "success";
     }
     
+
+
+    //SETS
     public List<Set> GetSets()
     {
         return _context.Sets.ToList();
+    }
+
+
+
+    //CARDS
+    public async Task<List<Card>> GetAllCards()
+    {
+        return await _context.Cards.ToListAsync();
+    }
+
+    public async Task<List<Card>> GetCards(string searchTerm, string filterOption, int pageNumber, int pageSize)
+    {
+        var allCards = await GetAllCards();
+
+        var paginatedCards = allCards
+            .Where(card => (string.IsNullOrEmpty(searchTerm) || card.Name.Contains(searchTerm)) &&
+                            (string.IsNullOrEmpty(filterOption) || card.Type == filterOption))
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(card => new Card { Name = card.Name, OriginalImageUrl = card.OriginalImageUrl })
+            .ToList();
+
+        return paginatedCards;
     }
 }
