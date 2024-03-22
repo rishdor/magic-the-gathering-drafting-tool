@@ -2,10 +2,13 @@
 @using magick.Models
 @using magick.Services
 @inject Service service
+@using System.Text.RegularExpressions
 
 <h3>Register</h3>
 
-<EditForm Model="user" OnSubmit="HandleValidSubmit" FormName="RegistationForm">
+<EditForm Model="user" OnValidSubmit="HandleValidSubmit" FormName="RegistationForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
     <div class="form-group">
         <label for="username">Username:</label>
@@ -22,26 +25,76 @@
         <InputText id="password" type='password' class="form-control" @bind-Value="user.Password" autocomplete="off" />
     </div>
 
+    <div class="form-group">
+        <label for="repeatPassword">Repeat password:</label>
+        <InputText id="repeatPassword" type='password' class="form-control" @bind-Value="repeatPassword" autocomplete="off" />
+    </div>
+
     <button type="submit" class="btn btn-primary">Register</button>
 </EditForm>
 
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-2">
+        @errorMessage
+    </div>
+}
+
 @code {
     [SupplyParameterFromForm]
-    public User? user { get; set; }
+    public User user { get; set; } = new User();
+    [SupplyParameterFromForm]
+    public string? repeatPassword { get; set; }
 
-    protected override void OnInitialized() => user ??= new();
+    private string? errorMessage;
 
     private async Task HandleValidSubmit()
     {
-        var result = await service.RegisterUser(user);
-        if (result)
+        if (user.Email != null && !ValidateEmailPattern(user.Email))
         {
-            Console.WriteLine("Registration successful");
+            errorMessage = "Invalid email format";
+            return;
+        }
+        if (!CheckPasswordCriteria(user.Password))
+        {
+            errorMessage = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number";
+            return;
+        }
+        if (user.Password != repeatPassword)
+        {
+            errorMessage = "Passwords do not match";
+            return;
+        }
+        var result = await service.RegisterUser(user);
+        if (result=="success")
+        {
+            errorMessage = string.Empty;
+            user = new User();
+            repeatPassword = string.Empty;
+            //create a session and redirect to home
+        }
+        else if (result=="username exists")
+        {
+            errorMessage = "User with this username already exists";
+        }
+        else if (result == "email exists")
+        {
+            errorMessage = "User with this email already exists";
         }
         else
         {
-            Console.WriteLine("Registration failed");
+            errorMessage = "An error occurred";
         }
-        user = new User();
+    }
+
+    private static bool CheckPasswordCriteria(string password)
+    {
+        string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
+        return Regex.IsMatch(password, pattern);
+    }
+    private static bool ValidateEmailPattern(string email)
+    {
+        string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+        return Regex.IsMatch(email, pattern);
     }
 }

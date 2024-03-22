@@ -27,26 +27,33 @@ public class Service
     {
         return await _context.Colors.ToListAsync();
     }
-    public async Task<bool> RegisterUser(User user)
+        public async Task<string> RegisterUser(User user)
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser != null)
         {
-            return false;
+            return "username exists";
         }
         existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
         if (existingUser != null)
         {
-            return false;
+            return "email exists";
         }
-        
+
         user.Password = PasswordHashing.HashPassword(user.Password);
         _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        var result = await _context.SaveChangesAsync();
 
-        return true;
+        if (result > 0)
+        {
+            return "success";
+        }
+        else
+        {
+            return "failure";
+        }
     }
-
+    
     public List<Set> GetSets()
     {
         return _context.Sets.ToList();
