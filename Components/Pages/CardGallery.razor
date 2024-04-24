@@ -3,13 +3,13 @@
 @using magick.Services
 @inject Service service
 
-
 <div>
     <input @bind="searchTerm" placeholder="Search cards..." />
     <select @bind="filterOption">
         <option value="">All</option>
         <!-- filter options here -->
     </select>
+    <button @onclick="LoadCards">Submit</button>
 </div>
 
 @if (cards == null)
@@ -21,9 +21,11 @@ else
     <div>
     @foreach (var card in cards)
     {
-        <CardComponent card="card" />
+        <CardComponent card="@card" />
     }
 </div>
+    <button @onclick="PreviousPage">Previous</button>
+    <button @onclick="NextPage">Next</button>
 }
 
 @code {
@@ -41,5 +43,22 @@ else
     private async Task LoadCards()
     {
         cards = await service.GetCards(searchTerm, filterOption, pageNumber, pageSize);
+    }
+
+    private async Task NextPage()
+    {
+        pageNumber++;
+        Console.WriteLine(pageNumber);
+        await LoadCards();
+        Console.WriteLine(pageNumber);
+    }
+
+    private async Task PreviousPage()
+    {
+        if (pageNumber > 1)
+        {
+            pageNumber--;
+            await LoadCards();
+        }
     }
 }
