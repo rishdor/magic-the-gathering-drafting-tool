@@ -50,16 +50,6 @@
 
     private async Task HandleValidSubmit()
     {
-        if (user.Email != null && !ValidateEmailPattern(user.Email))
-        {
-            errorMessage = "Invalid email format";
-            return;
-        }
-        if (!CheckPasswordCriteria(user.Password))
-        {
-            errorMessage = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number";
-            return;
-        }
         if (user.Password != repeatPassword)
         {
             errorMessage = "Passwords do not match";
@@ -85,16 +75,5 @@
         {
             errorMessage = "An error occurred";
         }
-    }
-
-    private static bool CheckPasswordCriteria(string password)
-    {
-        string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
-        return Regex.IsMatch(password, pattern);
-    }
-    private static bool ValidateEmailPattern(string email)
-    {
-        string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-        return Regex.IsMatch(email, pattern);
     }
 }

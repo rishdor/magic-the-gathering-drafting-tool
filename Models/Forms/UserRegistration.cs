@@ -11,6 +11,9 @@ public partial class UserRegistration
     public string Username { get; set; } = null!;
 
     [Required]
+    [RegularExpression(
+        pattern: @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$",
+        ErrorMessage = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number")]
     public string Password { get; set; } = null!;
 
     [Required]
