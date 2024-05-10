@@ -1,7 +1,7 @@
 @page "/login"
-@using magick.Models
+@using magick.Models.Forms
 @using magick.Services
-@inject Service service
+@inject UserService service
 @using System.Text.RegularExpressions
 
 <h3>Login</h3>
@@ -38,7 +38,7 @@
 
 @code {
     [SupplyParameterFromForm]
-    public User user { get; set; } = new User();
+    public UserLogin user { get; set; } = new UserLogin();
 
     private string? errorMessage;
 
@@ -48,7 +48,7 @@
         if (result=="success")
         {
             errorMessage = string.Empty;
-            user = new User();
+            user = new UserLogin();
             Console.WriteLine("Login successful");
             //create a session and redirect to home
         }
