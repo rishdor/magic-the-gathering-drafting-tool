@@ -19,4 +19,8 @@ public partial class UserRegistration
     [Required]
     [EmailAddress]
     public string Email { get; set; } = null!;
+
+    [Required]
+    [Compare("Password")]
+    public string RepeatPassword {get; set; } = null!;
 }
