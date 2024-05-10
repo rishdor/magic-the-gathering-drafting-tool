@@ -20,7 +20,7 @@ public class UserService
         return user;
     }
 
-    public async Task<string> RegisterUser(User user)
+    public async Task<string> RegisterUser(UserRegistration user)
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser != null)
@@ -33,8 +33,11 @@ public class UserService
             return "email exists";
         }
 
-        user.Password = PasswordHashing.HashPassword(user.Password);
-        _context.Users.Add(user);
+        User u = new User();
+        u.Email = user.Email;
+        u.Username = user.Username;
+        u.Password = PasswordHashing.HashPassword(user.Password);
+        _context.Users.Add(u);
         var result = await _context.SaveChangesAsync();
 
         if (result > 0)
