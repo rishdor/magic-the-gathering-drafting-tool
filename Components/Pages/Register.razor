@@ -56,24 +56,21 @@
             return;
         }
         var result = await service.RegisterUser(user);
-        if (result=="success")
-        {
-            errorMessage = string.Empty;
-            user = new UserRegistration();
-            repeatPassword = string.Empty;
-            //create a session and redirect to home
-        }
-        else if (result=="username exists")
-        {
-            errorMessage = "User with this username already exists";
-        }
-        else if (result == "email exists")
-        {
-            errorMessage = "User with this email already exists";
-        }
-        else
-        {
-            errorMessage = "An error occurred";
+        switch(result) {
+            case UserService.RegistrationResult.SUCCESS:
+                errorMessage = string.Empty;
+                user = new UserRegistration();
+                repeatPassword = string.Empty;
+                break;
+            case UserService.RegistrationResult.USERNAME_TAKEN:
+                errorMessage = "User with this username already exists.";
+                break;
+            case UserService.RegistrationResult.EMAIL_TAKEN:
+                errorMessage = "User with this email already exists.";
+                break;
+            case UserService.RegistrationResult.GENERAL_FAILURE:
+                errorMessage = "An error occurred.";
+                break;
         }
     }
 }

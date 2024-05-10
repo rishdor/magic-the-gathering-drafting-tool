@@ -45,20 +45,16 @@
     private async Task HandleValidSubmit()
     {
         var result = await service.LoginUser(user);
-        if (result=="success")
+        if (result)
         {
             errorMessage = string.Empty;
             user = new UserLogin();
             Console.WriteLine("Login successful");
             //create a session and redirect to home
         }
-        else if (result == "failure")
-        {
-            errorMessage = "Incorrect username or password";
-        }
         else
         {
-            errorMessage = "An error occurred";
+            errorMessage = "Incorrect username or password";
         }
     }
 }

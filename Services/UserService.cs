@@ -20,18 +20,13 @@ public class UserService
         return user;
     }
 
-    public async Task<string> RegisterUser(UserRegistration user)
+    public async Task<RegistrationResult> RegisterUser(UserRegistration user)
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
-        if (existingUser != null)
-        {
-            return "username exists";
-        }
+        if (existingUser != null) return RegistrationResult.USERNAME_TAKEN;
+
         existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-        if (existingUser != null)
-        {
-            return "email exists";
-        }
+        if (existingUser != null) return RegistrationResult.EMAIL_TAKEN;
 
         User u = new User();
         u.Email = user.Email;
@@ -40,24 +35,25 @@ public class UserService
         _context.Users.Add(u);
         var result = await _context.SaveChangesAsync();
 
-        if (result > 0)
-        {
-            return "success";
-        }
-        else
-        {
-            return "failure";
-        }
+        return result > 0 ? RegistrationResult.SUCCESS
+            : RegistrationResult.GENERAL_FAILURE;
     }
 
-    public async Task<string> LoginUser(UserLogin user)
+    public async Task<bool> LoginUser(UserLogin user)
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
         {
-            return "failure";
+            return false;
         }
 
-        return "success";
+        return true;
+    }
+
+    public enum RegistrationResult {
+        SUCCESS,
+        USERNAME_TAKEN,
+        EMAIL_TAKEN,
+        GENERAL_FAILURE
     }
 }
