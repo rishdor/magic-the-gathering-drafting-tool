@@ -10,6 +10,7 @@ namespace magick.Services;
 public class UserService(MagickContext context)
 {
     public event EventHandler? LoggedIn;
+    public event EventHandler? LoggedOut;
 
     private readonly MagickContext _context = context;
     private User? _user;
@@ -60,6 +61,14 @@ public class UserService(MagickContext context)
         await GetLocalStorage().SetAsync("user", user.Username);
         LoggedIn?.Invoke(this, EventArgs.Empty);
         return true;
+    }
+
+    public async Task<bool> LogoutUser() {
+        bool wasLoggedIn = await GetUser() != null;
+        _user = null;
+        await GetLocalStorage().DeleteAsync("user");
+        LoggedOut?.Invoke(this, EventArgs.Empty);
+        return wasLoggedIn;
     }
 
 
