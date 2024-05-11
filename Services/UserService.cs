@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace magick.Services;
 
-public class UserService(MagickContext context, ProtectedLocalStorage localStorage)
+public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLocalStorage localStorage)
 {
     public event EventHandler? LoggedIn;
     public event EventHandler? LoggedOut;
 
-    private readonly MagickContext _context = context;
+    private readonly IDbContextFactory<MagickContext> _factory = factory;
     private readonly ProtectedLocalStorage _localStorage = localStorage;
     private User? _user;
 
@@ -28,16 +28,19 @@ public class UserService(MagickContext context, ProtectedLocalStorage localStora
 
     public async Task<User?> GetUser(string username)
     {
-        User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        var context = _factory.CreateDbContext();
+        User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == username);
         return user;
     }
 
     public async Task<RegistrationResult> RegisterUser(UserRegistration user)
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+        var context = _factory.CreateDbContext();
+
+        var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser != null) return RegistrationResult.USERNAME_TAKEN;
 
-        existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+        existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
         if (existingUser != null) return RegistrationResult.EMAIL_TAKEN;
 
         User u = new() {
@@ -46,8 +49,8 @@ public class UserService(MagickContext context, ProtectedLocalStorage localStora
             Password = PasswordHashing.HashPassword(user.Password)
         };
 
-        _context.Users.Add(u);
-        var result = await _context.SaveChangesAsync();
+        context.Users.Add(u);
+        var result = await context.SaveChangesAsync();
 
         return result > 0 ? RegistrationResult.SUCCESS
             : RegistrationResult.GENERAL_FAILURE;
@@ -55,7 +58,9 @@ public class UserService(MagickContext context, ProtectedLocalStorage localStora
 
     public async Task<bool> LoginUser(UserLogin user)
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+
+        var context = _factory.CreateDbContext();
+        var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
             return false;
         
