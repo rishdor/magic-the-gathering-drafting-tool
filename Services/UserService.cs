@@ -28,14 +28,14 @@ public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLoca
 
     public async Task<User?> GetUser(string username)
     {
-        var context = _factory.CreateDbContext();
+        using var context = _factory.CreateDbContext();
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == username);
         return user;
     }
 
     public async Task<RegistrationResult> RegisterUser(UserRegistration user)
     {
-        var context = _factory.CreateDbContext();
+        using var context = _factory.CreateDbContext();
 
         var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser != null) return RegistrationResult.USERNAME_TAKEN;
@@ -59,7 +59,7 @@ public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLoca
     public async Task<bool> LoginUser(UserLogin user)
     {
 
-        var context = _factory.CreateDbContext();
+        using var context = _factory.CreateDbContext();
         var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
             return false;
