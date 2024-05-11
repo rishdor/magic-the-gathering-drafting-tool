@@ -19,8 +19,8 @@ public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLoca
     public async Task<User?> GetUser()
     {
         if (_user == null) {
-            var result = await _localStorage.GetAsync<string>("user");
-            if (result.Success && result.Value != null) _user = await GetUser(result.Value);
+            var result = await _localStorage.GetAsync<User>("user");
+            if (result.Success) _user = result.Value;
         }
 
         return _user;
@@ -64,7 +64,7 @@ public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLoca
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
             return false;
         
-        await _localStorage.SetAsync("user", user.Username);
+        await _localStorage.SetAsync("user", existingUser);
         LoggedIn?.Invoke(this, EventArgs.Empty);
         return true;
     }
