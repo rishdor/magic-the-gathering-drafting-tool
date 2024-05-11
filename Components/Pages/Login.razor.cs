@@ -12,6 +12,13 @@ public partial class Login {
 
     private string? errorMessage;
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (await Service!.GetUser() != null)
+            Navigation!.NavigateTo("/");
+        await base.OnInitializedAsync();
+    }
+
     private async Task HandleValidSubmit()
     {
         if (await Service!.LoginUser(User))
