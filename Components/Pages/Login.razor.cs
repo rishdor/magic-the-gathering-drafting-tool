@@ -1,11 +1,13 @@
 using magick.Models.Forms;
 using magick.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace magick.Components.Pages;
 
 public partial class Login {
     [Inject] public UserService? Service { get; set; }
+    [Inject] public NavigationManager? Navigation { get; set; }
     [SupplyParameterFromForm] public UserLogin User { get; set; } = new();
 
     private string? errorMessage;
@@ -14,10 +16,7 @@ public partial class Login {
     {
         if (await Service!.LoginUser(User))
         {
-            errorMessage = string.Empty;
-            User = new UserLogin();
-            Console.WriteLine("Login successful");
-            //create a session and redirect to home
+            Navigation!.NavigateTo("/");
         }
         else
         {

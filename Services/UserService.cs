@@ -2,16 +2,24 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using magick.Models;
 using magick.Models.Forms;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace magick.Services;
 
-public class UserService
+public class UserService(MagickContext context)
 {
-    private readonly MagickContext _context;
+    private readonly MagickContext _context = context;
+    private User? _user;
 
-    public UserService(MagickContext context)
+    public async Task<User?> GetUser()
     {
-        _context = context;
+        if (_user == null) {
+            var result = await GetLocalStorage().GetAsync<string>("user");
+            if (result.Success && result.Value != null) _user = await GetUser(result.Value);
+        }
+
+        return _user;
     }
 
     public async Task<User?> GetUser(string username)
@@ -28,10 +36,12 @@ public class UserService
         existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
         if (existingUser != null) return RegistrationResult.EMAIL_TAKEN;
 
-        User u = new User();
-        u.Email = user.Email;
-        u.Username = user.Username;
-        u.Password = PasswordHashing.HashPassword(user.Password);
+        User u = new() {
+            Email = user.Email,
+            Username = user.Username,
+            Password = PasswordHashing.HashPassword(user.Password)
+        };
+
         _context.Users.Add(u);
         var result = await _context.SaveChangesAsync();
 
@@ -43,12 +53,17 @@ public class UserService
     {
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
-        {
             return false;
-        }
-
+        
+        await GetLocalStorage().SetAsync("user", user.Username);
         return true;
     }
+
+
+    private ProtectedLocalStorage GetLocalStorage() {
+        return _context.GetService<ProtectedLocalStorage>()!;
+    }
+
 
     public enum RegistrationResult {
         SUCCESS,
