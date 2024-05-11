@@ -7,18 +7,19 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace magick.Services;
 
-public class UserService(MagickContext context)
+public class UserService(MagickContext context, ProtectedLocalStorage localStorage)
 {
     public event EventHandler? LoggedIn;
     public event EventHandler? LoggedOut;
 
     private readonly MagickContext _context = context;
+    private readonly ProtectedLocalStorage _localStorage = localStorage;
     private User? _user;
 
     public async Task<User?> GetUser()
     {
         if (_user == null) {
-            var result = await GetLocalStorage().GetAsync<string>("user");
+            var result = await _localStorage.GetAsync<string>("user");
             if (result.Success && result.Value != null) _user = await GetUser(result.Value);
         }
 
@@ -58,7 +59,7 @@ public class UserService(MagickContext context)
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
             return false;
         
-        await GetLocalStorage().SetAsync("user", user.Username);
+        await _localStorage.SetAsync("user", user.Username);
         LoggedIn?.Invoke(this, EventArgs.Empty);
         return true;
     }
@@ -66,14 +67,9 @@ public class UserService(MagickContext context)
     public async Task<bool> LogoutUser() {
         bool wasLoggedIn = await GetUser() != null;
         _user = null;
-        await GetLocalStorage().DeleteAsync("user");
+        await _localStorage.DeleteAsync("user");
         LoggedOut?.Invoke(this, EventArgs.Empty);
         return wasLoggedIn;
-    }
-
-
-    private ProtectedLocalStorage GetLocalStorage() {
-        return _context.GetService<ProtectedLocalStorage>()!;
     }
 
 
