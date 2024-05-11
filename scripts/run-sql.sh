@@ -1,1 +1,1 @@
-sudo su postgres -c "psql -f '$3' $1 $2"
+psql -h 127.0.0.1 -f "$2" magick $1

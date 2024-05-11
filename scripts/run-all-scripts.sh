@@ -1,5 +1,5 @@
-./run-sql.sh postgres postgres create-users.sql
-./run-sql.sh postgres postgres create-database.sql
-./run-sql.sh magick kaiba optimized-mtg.sql
-./run-sql.sh magick kaiba create-tables.sql
-./run-sql.sh magick kaiba grant-privileges.sql
+./run-sql-postgres.sh create-users.sql &&
+./run-sql-postgres.sh create-database.sql &&
+./run-sql.sh kaiba optimized-mtg.sql &&
+./run-sql.sh kaiba create-tables.sql &&
+./run-sql.sh kaiba grant-privileges.sql
