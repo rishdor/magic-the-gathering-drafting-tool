@@ -9,6 +9,8 @@ namespace magick.Services;
 
 public class UserService(MagickContext context)
 {
+    public event EventHandler? LoggedIn;
+
     private readonly MagickContext _context = context;
     private User? _user;
 
@@ -56,6 +58,7 @@ public class UserService(MagickContext context)
             return false;
         
         await GetLocalStorage().SetAsync("user", user.Username);
+        LoggedIn?.Invoke(this, EventArgs.Empty);
         return true;
     }
 

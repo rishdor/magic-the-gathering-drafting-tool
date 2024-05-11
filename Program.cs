@@ -2,6 +2,8 @@ using magick.Components;
 using magick.Services;
 using magick.Models;
 using Microsoft.EntityFrameworkCore;
+using magick.Models.Forms;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<UserLogin>();
 
 builder.Services.AddDbContext<MagickContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

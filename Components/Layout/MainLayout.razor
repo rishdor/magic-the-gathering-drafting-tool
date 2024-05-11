@@ -1,20 +1,10 @@
 ﻿@inherits LayoutComponentBase
-@using Models
-@using Services
-@inject UserService UserService
 
 <div class="page">
     <main>
         <div class="top-row px-4">
             <a href="/" class="title">Magic The Gathering</a>
-            @if(user == null)
-            {
-                <a href="/login">Login</a>
-            }
-            else
-            {
-                <a href="/logout">@user.Username</a>
-            }
+            <Profile />
         </div>
 
         <article class="content px-4">
@@ -28,12 +18,3 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-
-@code {
-    private User? user;
-
-    protected override async Task OnInitializedAsync()
-    {
-        user = await UserService.GetUser();
-    }
-}

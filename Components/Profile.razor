@@ -1,0 +1,33 @@
+@implements IDisposable
+@using Services
+@using Models
+@inject UserService UserService
+
+@if(user == null)
+{
+    <a href="/login" class="title">Login</a>
+}
+else
+{
+    <div>Hello @user.Username</div>
+    <a href="/logout" class="title">Logout</a>
+}
+
+@code {
+    protected override void OnInitialized()
+    => UserService.LoggedIn += this.OnLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    => user = await UserService.GetUser();
+
+    private User? user;
+
+    private async void OnLoggedIn(object? sender, EventArgs e)
+    {
+        user = await UserService.GetUser();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    => UserService.LoggedIn -= this.OnLoggedIn;
+}
