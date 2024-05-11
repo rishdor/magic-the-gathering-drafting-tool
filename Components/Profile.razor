@@ -1,7 +1,4 @@
 @implements IDisposable
-@using Services
-@using Models
-@inject UserService UserService
 
 @if(user == null)
 {
@@ -11,32 +8,4 @@ else
 {
     <div>Hello @user.Username</div>
     <a class="title" @onclick="Logout" @onclick:preventDefault>Logout</a>
-}
-
-@code {
-    protected override void OnInitialized()
-    {
-        UserService.LoggedIn += this.OnLoggedInOut;
-        UserService.LoggedOut += this.OnLoggedInOut;
-    }
-    protected override async Task OnInitializedAsync()
-    => user = await UserService.GetUser();
-
-    private User? user;
-
-    private async void OnLoggedInOut(object? sender, EventArgs e)
-    {
-        user = await UserService.GetUser();
-        StateHasChanged();
-    }
-
-    private void Logout() {
-        UserService.LogoutUser();
-    }
-
-    public void Dispose()
-    {
-        UserService.LoggedIn -= this.OnLoggedInOut;
-        UserService.LoggedOut -= this.OnLoggedInOut;
-    }
 }
