@@ -64,6 +64,8 @@ public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLoca
         if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
             return false;
         
+        // Force password to null before caching
+        existingUser.Password = null!;
         await _localStorage.SetAsync("user", existingUser);
         LoggedIn?.Invoke(this, EventArgs.Empty);
         return true;
