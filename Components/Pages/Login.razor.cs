@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 namespace magick.Components.Pages;
 
 public partial class Login {
-    [Inject] public UserService? Service { get; set; }
+    [Inject] public UserService? UserService { get; set; }
     [Inject] public NavigationManager? Navigation { get; set; }
     [SupplyParameterFromForm] public UserLogin User { get; set; } = new();
 
@@ -14,14 +14,14 @@ public partial class Login {
 
     protected override async Task OnInitializedAsync()
     {
-        if (await Service!.GetUser() != null)
+        if (await UserService!.GetUser() != null)
             Navigation!.NavigateTo("/");
         await base.OnInitializedAsync();
     }
 
     private async Task HandleValidSubmit()
     {
-        if (await Service!.LoginUser(User))
+        if (await UserService!.LoginUser(User))
         {
             Navigation!.NavigateTo("/");
         }

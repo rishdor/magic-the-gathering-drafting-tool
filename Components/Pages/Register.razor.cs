@@ -7,14 +7,14 @@ namespace magick.Components.Pages;
 
 public partial class Register
 {
-    [Inject] public UserService? Service { get; set; }
+    [Inject] public UserService? UserService { get; set; }
     [SupplyParameterFromForm] public UserRegistration User { get; set; } = new();
 
     private string? errorMessage;
 
     private async Task HandleValidSubmit()
     {
-        var result = await Service!.RegisterUser(User);
+        var result = await UserService!.RegisterUser(User);
         switch(result) {
             case RegistrationResult.SUCCESS:
                 errorMessage = string.Empty;
