@@ -1,18 +1,24 @@
 ﻿@page "/setup"
-@rendermode InteractiveServer
-@using magick.Models
-@using magick.Services
-@inject Service service
-@inject NavigationManager _nav
 
 <PageTitle>Setup</PageTitle>
 
 <h1>Select your set</h1>
 
-<input type="text" id="set-filter" name="set-filter" placeholder="Search"><button onclick="filterSets()">Search</button>
+<EditForm Model="Query" OnValidSubmit="FilterSets">
+    <input type="text" id="set-filter" name="set-filter" placeholder="Search" @bind="Query.Text">
+    <input type="submit" value="Search" />
+</EditForm>
+
 <div id="sets">
-    @foreach (var set in service.GetSets())
+    @if(sets.Count == 0)
     {
-        <button>@set.Name</button>
+        <div>No matching sets found!</div>
     }
+    else
+    {
+        @foreach (var set in sets)
+        {
+            <a href="/draft?set=@set.Id">@set.Name</a>
+        }
+    }  
 </div>
