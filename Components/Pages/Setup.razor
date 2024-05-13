@@ -2,7 +2,7 @@
 @rendermode InteractiveServer
 @using magick.Models
 @using magick.Services
-@inject Service service
+@inject CardService CardService
 @inject NavigationManager _nav
 
 <PageTitle>Setup</PageTitle>
@@ -11,7 +11,7 @@
 
 <input type="text" id="set-filter" name="set-filter" placeholder="Search"><button onclick="filterSets()">Search</button>
 <div id="sets">
-    @foreach (var set in service.GetSets())
+    @foreach (var set in CardService.GetSets())
     {
         <button>@set.Name</button>
     }
