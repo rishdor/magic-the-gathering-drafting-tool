@@ -21,9 +21,11 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         return context.Colors.ToList();
     }
     
-    public List<Set> GetSets()
+    public List<Set> GetSets(string query)
     {
         using MagickContext context = _factory.CreateDbContext();
-        return context.Sets.ToList();
+        return (from set in context.Sets
+            where set.Name.ToLower().Contains(query.ToLower())
+            select set).ToList();
     }
 }
