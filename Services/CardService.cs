@@ -15,6 +15,14 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         return context.Cards.ToList();
     }
 
+    public List<Card> GetCardsFromSet(string setCode)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        return (from card in context.Cards
+            where card.SetCode == setCode
+            select card).ToList();
+    }
+
     public List<Color> GetColors()
     {
         using MagickContext context = _factory.CreateDbContext();

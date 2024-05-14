@@ -1,22 +1,48 @@
 using Microsoft.EntityFrameworkCore;
 using magick.Models;
+using System.Collections.Immutable;
 
 namespace magick.Services;
 
-public class DraftService
+public class DraftService(CardService cardService)
 {
-    public void StartDraft(int setId)
-        => throw new NotImplementedException();
+    public static readonly int PACK_SIZE = 16;
+
+    private readonly CardService _cardService = cardService;
+    private readonly List<Card> _table = [];
+    private readonly List<Card> _deck = [];
+    private string? _setCode = null;
+    private bool _isDrafting = false;
+
+
+    public void StartDraft(string setCode)
+    {
+        _table.Clear();
+        _deck.Clear();
+        _setCode = setCode;
+        _isDrafting = true;
+    }
 
     public void FinishDraft()
-        => throw new NotImplementedException();
+    {
+        _table.Clear();
+        _deck.Clear();
+        _setCode = null;
+        _isDrafting = false;
+    }
 
     public bool IsDrafting()
-        => throw new NotImplementedException();
+        => _isDrafting;
 
 
     public List<Card> OpenPack()
-        => throw new NotImplementedException();
+    {
+        var availableCards = _cardService.GetCardsFromSet(_setCode!);
+        Card[] pack = Random.Shared
+            .GetItems(availableCards.ToArray(), PACK_SIZE);
+        _table.AddRange(pack);
+        return pack.ToList();
+    }
 
 
     public void AddCardToDeck(int cardTableIndex)
@@ -27,8 +53,8 @@ public class DraftService
 
 
     public List<Card> GetTable()
-        => throw new NotImplementedException();
+        => _table;
 
     public List<Card> GetDeck()
-        => throw new NotImplementedException();
+        => _deck;
 }
