@@ -18,7 +18,15 @@
     {
         @foreach (var set in sets)
         {
-            <a href="/draft/@set.Code">@set.Name</a>
+            //todo
+            //We can get more icons from: https://scryfall.com/docs/api/
+            //get request with the set.Code and from return we need icon_svg_uri
+
+            var url = "https://svgs.scryfall.io/sets/" + @set.Code.ToLower() + ".svg";
+            <a href="/draft/@set.Code">
+            @set.Name 
+            <img src="@url" width="100" height="100" onerror="this.style.display='none'"/>
+            </a>
         }
     }  
 </div>
