@@ -8,21 +8,17 @@
 <button @onclick="OpenPack">Open next booster pack</button>
 
 <h3>Table</h3>
-<ul>
-    @foreach (Card card in table)
-    {
-        <li>
-            <button @onclick="@(_ => AddCardToDeck(0))">@card.Name</button>
-        </li>
+@foreach (Card card in table)
+{
+    if (@card.OriginalImageUrl is not null) {
+        <img src="@card.OriginalImageUrl" @onclick="@(_ => AddCardToDeck(0))">
     }
-</ul>
+     
+}
 
 <h3>Deck</h3>
-<ul>
-    @foreach (Card card in deck)
-    {
-        <li>
-            <button @onclick="@(_ => RemoveCardFromDeck(0))">@card.Name</button>
-        </li>
-    }
-</ul>
+
+@foreach (Card card in deck)
+{
+    <img src="@card.OriginalImageUrl" @onclick="@(_ => RemoveCardFromDeck(0))">
+}
