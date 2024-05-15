@@ -9,8 +9,8 @@ public partial class Draft
     [Inject] public DraftService? DraftService { get; set; }
     [Parameter] public string? SetCode { get; set; }
 
-    private List<Card> table = new();
-    private List<Card> deck = new();
+    private List<Tagged<Card>> table = [];
+    private List<Tagged<Card>> deck = [];
 
 
     protected override void OnInitialized()
@@ -22,11 +22,23 @@ public partial class Draft
 
 
     private void OpenPack()
-        => DraftService!.OpenPack();
+    {
+        DraftService!.OpenPack();
+        table = DraftService!.GetTable();
+        deck  = DraftService!.GetDeck();
+    }
 
-    private void AddCardToDeck(int tableIndex)
-        => DraftService!.AddCardToDeck(tableIndex);
+    private void AddCardToDeck(Guid cardUid)
+    {
+        DraftService!.AddCardToDeck(cardUid);
+        table = DraftService!.GetTable();
+        deck  = DraftService!.GetDeck();
+    }
 
-    private void RemoveCardFromDeck(int deckIndex)
-        => DraftService!.RemoveCardFromDeck(deckIndex);
+    private void RemoveCardFromDeck(Guid cardUid)
+    {
+        DraftService!.RemoveCardFromDeck(cardUid);
+        table = DraftService!.GetTable();
+        deck  = DraftService!.GetDeck();
+    }
 }

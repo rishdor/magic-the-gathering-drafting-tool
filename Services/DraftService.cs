@@ -9,8 +9,8 @@ public class DraftService(CardService cardService)
     public static readonly int PACK_SIZE = 16;
 
     private readonly CardService _cardService = cardService;
-    private readonly List<Card> _table = [];
-    private readonly List<Card> _deck = [];
+    private readonly Dictionary<Guid, Card> _table = [];
+    private readonly Dictionary<Guid, bool> _deck = [];
     private string? _setCode = null;
     private bool _isDrafting = false;
 
@@ -35,26 +35,43 @@ public class DraftService(CardService cardService)
         => _isDrafting;
 
 
-    public List<Card> OpenPack()
+    public void OpenPack()
     {
         var availableCards = _cardService.GetCardsFromSet(_setCode!);
         Card[] pack = Random.Shared
             .GetItems(availableCards.ToArray(), PACK_SIZE);
-        _table.AddRange(pack);
-        return pack.ToList();
+        foreach (Card card in pack) {
+            Guid id = Guid.NewGuid();
+            _table[id] = card;
+            _deck[id] = false;
+        }
     }
 
 
-    public void AddCardToDeck(int cardTableIndex)
-        => throw new NotImplementedException();
+    public void AddCardToDeck(Guid cardUid)
+    {
+        if (!_table.ContainsKey(cardUid))
+            throw new Exception("Card not found");
+        _deck[cardUid] = true;
+    }
 
-    public void RemoveCardFromDeck(int cardDeckIndex)
-        => throw new NotImplementedException();
+    public void RemoveCardFromDeck(Guid cardUid)
+    {
+        if (!_table.ContainsKey(cardUid))
+            throw new Exception("Card not found");
+        _deck[cardUid] = false;
+    }
 
 
-    public List<Card> GetTable()
-        => _table;
+    public List<Tagged<Card>> GetTable()
+        => (from pair in _table
+            where !_deck[pair.Key]
+            select Tagged<Card>.FromPair(pair)
+        ).ToList();
 
-    public List<Card> GetDeck()
-        => _deck;
+    public List<Tagged<Card>> GetDeck()
+        => (from pair in _table
+            where _deck[pair.Key]
+            select Tagged<Card>.FromPair(pair)
+        ).ToList();
 }

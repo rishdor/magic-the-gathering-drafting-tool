@@ -9,20 +9,20 @@
 
 <h3>Table</h3>
 <ul>
-    @foreach (Card card in table)
+    @foreach (var card in table)
     {
         <li>
-            <button @onclick="@(_ => AddCardToDeck(0))">@card.Name</button>
+            <button @onclick="@(_ => AddCardToDeck(card.Tag))">@(card.Instance.Name)</button>
         </li>
     }
 </ul>
 
 <h3>Deck</h3>
 <ul>
-    @foreach (Card card in deck)
+    @foreach (var card in deck)
     {
         <li>
-            <button @onclick="@(_ => RemoveCardFromDeck(0))">@card.Name</button>
+            <button @onclick="@(_ => RemoveCardFromDeck(card.Tag))">@(card.Instance.Name)</button>
         </li>
     }
 </ul>
