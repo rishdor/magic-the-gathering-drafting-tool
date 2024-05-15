@@ -9,20 +9,21 @@
 
 <h3>Table</h3>
 <ul>
-    @foreach (var card in table)
+@foreach (var card in table)
+{
+    if (@card.Instance.OriginalImageUrl is not null)
     {
         <li>
-            <button @onclick="@(_ => AddCardToDeck(card.Tag))">@(card.Instance.Name)</button>
+        <img src="@card.Instance.OriginalImageUrl" @onclick="@(_ => AddCardToDeck(card.Tag))">
         </li>
     }
+}
 </ul>
 
 <h3>Deck</h3>
 <ul>
-    @foreach (var card in deck)
-    {
-        <li>
-            <button @onclick="@(_ => RemoveCardFromDeck(card.Tag))">@(card.Instance.Name)</button>
-        </li>
-    }
+@foreach (var card in deck)
+{
+    <img src="@card.Instance.OriginalImageUrl" @onclick="@(_ => RemoveCardFromDeck(card.Tag))">
+}
 </ul>
