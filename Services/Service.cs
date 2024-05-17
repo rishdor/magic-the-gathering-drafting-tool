@@ -23,8 +23,12 @@ public class Service
         return await _context.Colors.ToListAsync();
     }
     
+
+
+    //SETS
     public List<Set> GetSets()
     {
         return _context.Sets.ToList();
     }
+
 }

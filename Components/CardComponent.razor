@@ -1,0 +1,9 @@
+<div>
+    <img src="@card?.OriginalImageUrl" alt="@card?.Name" />
+    <p class="card-name">@card?.Name</p>
+</div>
+
+@code {
+    [Parameter]
+    public Card? card { get; set; }
+}
