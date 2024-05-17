@@ -15,6 +15,7 @@
         opacity: 1;
         background-color: rgb(231, 231, 231); 
     }
+
     .dark-overlay {
         position: fixed;
         top: 0;
@@ -23,6 +24,29 @@
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 9998;
+    }
+
+    .toast-body {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .card-detail {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        align-items: center;
+        gap: 20px;
+    }
+
+    #cardImage {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-detail div {
+        display: grid;
+        gap: 10px;
     }
 </style>
 
@@ -35,12 +59,14 @@
             </div>
             <div class="toast-body">
                 <div class="card-detail">
-                    <img id="cardImage" src="" alt=""/>
-                    <p id="convertedManaCost"></p>
-                    <p id="type"></p>
-                    <p id="rarityCode"></p>
-                    <p id="setCode"></p>
-                    <p id="text"></p>
+                    <img id="cardImage" src="@(_card?.OriginalImageUrl)" alt="@(_card?.Name)"/>
+                    <div>
+                        <p><strong>Mana Cost:</strong> @(_card?.ConvertedManaCost)</p>
+                        <p><strong>Type:</strong> @(_card?.Type)</p>
+                        <p><strong>Rarity Code:</strong> @(_card?.RarityCode)</p>
+                        <p><strong>Set Code:</strong> @(_card?.SetCode)</p>
+                        <p><strong>Text:</strong> @(_card?.Text)</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,12 +83,12 @@
     [Parameter]
     public string? HeaderText { get; set; }
 
-    [Parameter]
-    public string? BodyText { get; set; }
+    private Card? _card;
 
     public void Show(Card card)
     {
         Close();
+        _card = card;
         HeaderText = card.Name;
         IsVisible = true;
         StateHasChanged();
@@ -71,8 +97,8 @@
     public void Close()
     {
         HeaderText = string.Empty;
-        BodyText = string.Empty;
         IsVisible = false;
+        _card = null;
         StateHasChanged();
     }
 }
