@@ -12,6 +12,7 @@ namespace magick.Components.Pages
         protected List<Card>? cards;
         private long lastCardId = 0;
         private const int pageSize = 50;
+        string searchQuery = "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -20,7 +21,7 @@ namespace magick.Components.Pages
 
         protected async Task LoadMoreCards()
         {
-            var newCards = await service!.GetPaginatedCards(lastCardId, pageSize);
+            var newCards = await service!.GetCards(lastCardId, pageSize);
             if (cards == null)
             {
                 cards = newCards;
@@ -32,6 +33,24 @@ namespace magick.Components.Pages
             if (newCards.Any())
             {
                 lastCardId = newCards.Last().Id;
+            }
+        }
+
+        protected async Task SearchCards()
+        {
+            var searchedCards = await service!.SearchCard(searchQuery, lastCardId, pageSize);
+            if (cards == null)
+            {
+                cards = searchedCards;
+            }
+            else
+            {
+                cards.Clear();
+                cards.AddRange(searchedCards);
+            }
+            if (searchedCards.Any())
+            {
+                lastCardId = searchedCards.Last().Id;
             }
         }
     }

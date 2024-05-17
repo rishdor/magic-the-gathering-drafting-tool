@@ -43,66 +43,45 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         return await context.Cards.ToListAsync();
     }
 
-    public async Task<List<Card>> GetCards(string searchTerm, string filterOption, int pageNumber, int pageSize)
+    public async Task<List<Card>> GetCards(long lastCardId, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         var cardsQuery = context.Cards.AsQueryable();
 
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            cardsQuery = cardsQuery.Where(card => card.Name.Contains(searchTerm));
-        }
-
-        if (!string.IsNullOrEmpty(filterOption))
-        {
-            cardsQuery = cardsQuery.Where(card => card.Type == filterOption);
-        }
-
-        var paginatedCards = await cardsQuery
-            .OrderBy(card => card.Id)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .Select(card => new Card { Name = card.Name, OriginalImageUrl = card.OriginalImageUrl })
-            .ToListAsync();
+        var paginatedCards = await ApplyPagination(cardsQuery, lastCardId, pageSize);
 
         return paginatedCards;
     }
 
-    public async Task<List<Card>> GetAllCards(int pageNumber, int pageSize)
-    {
-        using MagickContext context = _factory.CreateDbContext();
-        return await context.Cards
-            .OrderBy(card => card.Id)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-    }
-
-    public async Task<List<Card>> GetCards(int pageNumber, int pageSize)
+    public async Task<List<Card>> SearchCard(string query, long lastCardId, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         var cardsQuery = context.Cards.AsQueryable();
 
-        var paginatedCards = await cardsQuery
-            .OrderBy(card => card.Id)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+        if (!string.IsNullOrEmpty(query))
+        {
+            cardsQuery = ApplySearch(cardsQuery, query, context);
+        }
+
+        var paginatedCards = await ApplyPagination(cardsQuery, lastCardId, pageSize);
 
         return paginatedCards;
     }
 
-    public async Task<List<Card>> GetPaginatedCards(long lastCardId, int pageSize)
+    private IQueryable<Card> ApplySearch(IQueryable<Card> cardsQuery, string query, MagickContext context)
     {
-        using MagickContext context = _factory.CreateDbContext();
-        var cardsQuery = context.Cards.AsQueryable();
+        return from card in cardsQuery
+            join set in context.Sets on card.SetCode equals set.Code
+            where card.Name.ToLower().Contains(query.ToLower()) || set.Name.ToLower().Contains(query.ToLower())
+            select card;
+    }
 
-        var paginatedCards = await cardsQuery
+    private async Task<List<Card>> ApplyPagination(IQueryable<Card> cardsQuery, long lastCardId, int pageSize)
+    {
+        return await cardsQuery
             .Where(card => card.Id > lastCardId && !string.IsNullOrEmpty(card.OriginalImageUrl))
             .OrderBy(card => card.Id)
             .Take(pageSize)
             .ToListAsync();
-
-        return paginatedCards;
     }
 }
