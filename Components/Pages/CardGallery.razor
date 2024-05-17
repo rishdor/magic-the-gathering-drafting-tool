@@ -1,47 +1,96 @@
 @page "/cards"
 @using magick.Models
-@using magick.Services
-@inject CardService service
 
-@if (cards == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <div>
-    @foreach (var card in cards)
-    {
-        <CardComponent card="@card" />
-    }
-    </div>
-    <button @onclick="LoadMoreCards">Load More</button>
-}
-
-@code {
-    private List<Card>? cards;
-    private long lastCardId = 0;
-    private const int pageSize = 50;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadMoreCards();
+<style>
+    h1 {
+        text-align: center;
+        font-weight: bold;
+        padding: 10px;
     }
 
-    private async Task LoadMoreCards()
-    {
-        var newCards = await service.GetPaginatedCards(lastCardId, pageSize);
-        if (cards == null)
-        {
-            cards = newCards;
-        }
-        else
-        {
-            cards.AddRange(newCards);
-        }
-        if (newCards.Any())
-        {
-            lastCardId = newCards.Last().Id;
-        }
+    .card-name {
+        text-align: center;
+        padding: 10px 0 0 0;
+        font-size: larger;
     }
-}
+
+    .loading {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .card {
+        width: calc(20% - 10px);
+        max-width: 300px;
+        min-width: 200px;
+        box-sizing: border-box;
+        border: none;
+    }
+
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .load-more-button {
+        display: block;
+        width: 200px;
+        height: 50px;
+        margin: 20px auto;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 12px;
+        padding: 14px 40px;
+        border: none;
+        outline: none;
+        padding: 20px 0 40px 0;
+    }
+
+    .load-more-button:hover {
+        background-color: white; 
+        color: black; 
+        border: 2px solid #4CAF50;
+    }
+
+    footer {
+        height: 50px;
+    }
+</style>
+
+<h1>Card Gallery</h1>
+
+<div>
+    @if (cards == null)
+    {
+        <p class="loading">Loading...</p>
+    }
+    else
+    {
+        <div class="cards-container">
+        @foreach (var card in cards)
+        {
+            <div class="card">
+                <CardComponent card="@card" />
+            </div>
+        }
+        </div>
+        <button class="load-more-button" @onclick="LoadMoreCards">Load More</button>
+        <footer></footer>
+    }
+</div>
