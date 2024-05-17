@@ -20,17 +20,16 @@ else
 
 @code {
     private List<Card>? cards;
-    private int pageNumber = 1;
+    private long lastCardId = 0;
     private const int pageSize = 50;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadMoreCards();
     }
-
     private async Task LoadMoreCards()
     {
-        var newCards = await service.GetCards(pageNumber, pageSize);
+        var newCards = await service.GetPaginatedCards(lastCardId, pageSize);
         if (cards == null)
         {
             cards = newCards;
@@ -39,6 +38,9 @@ else
         {
             cards.AddRange(newCards);
         }
-        pageNumber++;
+        if (newCards.Count > 0)
+        {
+            lastCardId = newCards.Last().Id;
+        }
     }
 }

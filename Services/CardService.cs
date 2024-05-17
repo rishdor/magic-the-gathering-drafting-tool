@@ -92,19 +92,18 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         return paginatedCards;
     }
 
-    public async Task<List<Card>> GetPaginatedCards(int pageNumber, int pageSize)
+    public async Task<List<Card>> GetPaginatedCards(long lastCardId, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         var cardsQuery = context.Cards.AsQueryable();
 
         var paginatedCards = await cardsQuery
+            .Where(card => card.Id > lastCardId && !string.IsNullOrEmpty(card.OriginalImageUrl))
             .OrderBy(card => card.Id)
-            .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(card => new Card { Name = card.Name, OriginalImageUrl = card.OriginalImageUrl })
             .ToListAsync();
 
         return paginatedCards;
     }
-
 }
