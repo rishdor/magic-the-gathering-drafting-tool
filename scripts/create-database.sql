@@ -1,0 +1,2 @@
+DROP DATABASE magick;
+CREATE DATABASE magick WITH OWNER = kaiba;

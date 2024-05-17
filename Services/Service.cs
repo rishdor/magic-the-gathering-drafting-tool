@@ -13,43 +13,14 @@ public class Service
         _context = context;
     }
 
-    //USERS
-    public async Task<string> RegisterUser(User user)
+    public async Task<List<Card>> GetCards()
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
-        if (existingUser != null)
-        {
-            return "username exists";
-        }
-        existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-        if (existingUser != null)
-        {
-            return "email exists";
-        }
-
-        user.Password = PasswordHashing.HashPassword(user.Password);
-        _context.Users.Add(user);
-        var result = await _context.SaveChangesAsync();
-
-        if (result > 0)
-        {
-            return "success";
-        }
-        else
-        {
-            return "failure";
-        }
+        return await _context.Cards.ToListAsync();
     }
 
-    public async Task<string> LoginUser(User user)
+    public async Task<List<Color>> GetColors()
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
-        if (existingUser == null || !PasswordHashing.VerifyPassword(user.Password, existingUser.Password))
-        {
-            return "failure";
-        }
-
-        return "success";
+        return await _context.Colors.ToListAsync();
     }
     
 

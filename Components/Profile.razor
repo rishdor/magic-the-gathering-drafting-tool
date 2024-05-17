@@ -1,0 +1,11 @@
+@implements IDisposable
+
+@if(user == null)
+{
+    <a href="/login" class="title">Login</a>
+}
+else
+{
+    <div>Hello @user.Username</div>
+    <a class="title" @onclick="Logout" @onclick:preventDefault>Logout</a>
+}

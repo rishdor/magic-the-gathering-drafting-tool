@@ -1,0 +1,2 @@
+CREATE USER kaiba WITH PASSWORD 'kaiba';
+CREATE USER yugi WITH PASSWORD 'yugi';
