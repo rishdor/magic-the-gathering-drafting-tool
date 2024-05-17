@@ -1,9 +1,16 @@
 <div>
-    <img src="@card?.OriginalImageUrl" alt="@card?.Name" />
+    <img src="@card?.OriginalImageUrl" alt="@card?.Name" @onclick="CardPopup"/>
     <p class="card-name">@card?.Name</p>
+    <Popup @ref="popupRef" />
 </div>
 
 @code {
     [Parameter]
     public Card? card { get; set; }
+    private Popup? popupRef;
+
+    private void CardPopup()
+    {
+        popupRef!.Show("Popup body text");
+    }
 }

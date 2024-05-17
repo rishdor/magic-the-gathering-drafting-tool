@@ -12,6 +12,7 @@ namespace magick.Components.Pages
         protected List<Card>? cards;
         private long lastCardId = 0;
         private const int pageSize = 50;
+        private Popup? popupRef;
 
         protected override async Task OnInitializedAsync()
         {
@@ -33,6 +34,12 @@ namespace magick.Components.Pages
             {
                 lastCardId = newCards.Last().Id;
             }
+        }
+
+        private void CardPopup()
+        {
+            popupRef!.Close();
+            popupRef!.Show("Popup body text");
         }
     }
 }

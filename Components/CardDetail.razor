@@ -1,0 +1,49 @@
+@using magick.Models
+
+<style>
+    .card-detail {
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-detail h2 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .card-detail img {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .card-detail p {
+        margin: 10px 0;
+        color: #666;
+    }
+
+</style>
+
+@if (card == null)
+{
+    <p>No card selected.</p>
+}
+else
+{
+    <div class="card-detail">
+        <h2>@card.Name</h2>
+        <img src="@card.OriginalImageUrl" alt="@card.Name" />
+        <p>Converted Mana Cost: @card.ConvertedManaCost</p>
+        <p>Type: @card.Type</p>
+        <p>Rarity Code: @card.RarityCode</p>
+        <p>Set Code: @card.SetCode</p>
+        <p>Text: @card.Text</p>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Card? card { get; set; }
+}
