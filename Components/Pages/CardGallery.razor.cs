@@ -36,10 +36,9 @@ namespace magick.Components.Pages
             }
         }
 
-        private void CardPopup()
-        {
-            popupRef!.Close();
-            popupRef!.Show("Popup body text");
-        }
+        // private void CardPopup()
+        // {
+        //     popupRef!.Show(card);
+        // }
     }
 }
