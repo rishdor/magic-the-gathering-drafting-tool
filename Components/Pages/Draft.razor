@@ -27,3 +27,8 @@
     <img src="@card.Instance.OriginalImageUrl" @onclick="@(_ => RemoveCardFromDeck(card.Tag))">
 }
 </ul>
+
+
+<label>Deck Name:</label>
+<input @bind="deckName" />
+<button @onclick="FinishDraft">Finish Draft</button>

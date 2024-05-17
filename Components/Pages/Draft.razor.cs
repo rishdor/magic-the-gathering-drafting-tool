@@ -7,10 +7,12 @@ namespace magick.Components.Pages;
 public partial class Draft
 {
     [Inject] public DraftService? DraftService { get; set; }
+    [Inject] public NavigationManager? Navigation { get; set; }
     [Parameter] public string? SetCode { get; set; }
 
     private List<Tagged<Card>> table = [];
     private List<Tagged<Card>> deck = [];
+    private string deckName = "";
 
 
     protected override void OnInitialized()
@@ -40,5 +42,11 @@ public partial class Draft
         DraftService!.RemoveCardFromDeck(cardUid);
         table = DraftService!.GetTable();
         deck  = DraftService!.GetDeck();
+    }
+
+    private void FinishDraft()
+    {
+        DraftService!.FinishDraft(deckName);
+        Navigation!.NavigateTo("/decks");
     }
 }
