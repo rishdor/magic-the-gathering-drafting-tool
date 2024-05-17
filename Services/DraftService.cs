@@ -4,11 +4,13 @@ using System.Collections.Immutable;
 
 namespace magick.Services;
 
-public class DraftService(CardService cardService)
+public class DraftService(CardService cardService, UserService userService, IDbContextFactory<MagickContext> factory)
 {
     public static readonly int PACK_SIZE = 16;
 
     private readonly CardService _cardService = cardService;
+    private readonly UserService _userService = userService;
+    private readonly IDbContextFactory<MagickContext> _factory = factory;
     private readonly Dictionary<Guid, Card> _table = [];
     private readonly Dictionary<Guid, bool> _deck = [];
     private string? _setCode = null;
@@ -23,8 +25,32 @@ public class DraftService(CardService cardService)
         _isDrafting = true;
     }
 
-    public void FinishDraft()
+    public async void FinishDraft(string deckName)
     {
+        using MagickContext context = _factory.CreateDbContext();
+
+        UserDeck deck = new() {
+            UserId =  (await _userService.GetUser())!.Id,
+            DeckName = deckName
+        };
+        Console.WriteLine(deck.Id);
+        context.UserDecks.Add(deck);
+        await context.SaveChangesAsync();
+        Console.WriteLine(deck.Id);
+
+        List<DeckCard> deckCards = (
+            from card in GetDeck()
+            select new DeckCard() {
+                DeckId = deck.Id,
+                CardId = card.Instance.Id
+            }
+        ).ToList();
+
+        foreach (var deckCard in deckCards)
+            context.DeckCards.Add(deckCard);
+
+        await context.SaveChangesAsync();
+
         _table.Clear();
         _deck.Clear();
         _setCode = null;
