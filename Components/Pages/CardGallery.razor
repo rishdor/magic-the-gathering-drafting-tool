@@ -27,6 +27,7 @@ else
     {
         await LoadMoreCards();
     }
+
     private async Task LoadMoreCards()
     {
         var newCards = await service.GetPaginatedCards(lastCardId, pageSize);
@@ -38,7 +39,7 @@ else
         {
             cards.AddRange(newCards);
         }
-        if (newCards.Count > 0)
+        if (newCards.Any())
         {
             lastCardId = newCards.Last().Id;
         }

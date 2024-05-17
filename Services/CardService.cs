@@ -101,7 +101,6 @@ public class CardService(IDbContextFactory<MagickContext> factory)
             .Where(card => card.Id > lastCardId && !string.IsNullOrEmpty(card.OriginalImageUrl))
             .OrderBy(card => card.Id)
             .Take(pageSize)
-            .Select(card => new Card { Name = card.Name, OriginalImageUrl = card.OriginalImageUrl })
             .ToListAsync();
 
         return paginatedCards;
