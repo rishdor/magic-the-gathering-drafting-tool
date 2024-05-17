@@ -31,36 +31,4 @@ public class Service
         return _context.Sets.ToList();
     }
 
-
-
-    //CARDS
-    public async Task<List<Card>> GetAllCards()
-    {
-        return await _context.Cards.ToListAsync();
-    }
-
-    public async Task<List<Card>> GetCards(string searchTerm, string filterOption, int pageNumber, int pageSize)
-    {
-        var cardsQuery = _context.Cards.AsQueryable();
-
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            cardsQuery = cardsQuery.Where(card => card.Name.Contains(searchTerm));
-        }
-
-        if (!string.IsNullOrEmpty(filterOption))
-        {
-            cardsQuery = cardsQuery.Where(card => card.Type == filterOption);
-        }
-
-        var paginatedCards = await cardsQuery
-            .OrderBy(card => card.Id)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .Select(card => new Card { Name = card.Name, OriginalImageUrl = card.OriginalImageUrl })
-            .ToListAsync();
-
-        return paginatedCards;
-    }
-
 }

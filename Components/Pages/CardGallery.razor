@@ -1,16 +1,7 @@
 @page "/cards"
 @using magick.Models
 @using magick.Services
-@inject Service service
-
-<div>
-    <input @bind="searchTerm" placeholder="Search cards..." />
-    <select @bind="filterOption">
-        <option value="">All</option>
-        <!-- filter options here -->
-    </select>
-    <button @onclick="LoadCards">Submit</button>
-</div>
+@inject CardService service
 
 @if (cards == null)
 {
@@ -23,42 +14,31 @@ else
     {
         <CardComponent card="@card" />
     }
-</div>
-    <button @onclick="PreviousPage">Previous</button>
-    <button @onclick="NextPage">Next</button>
+    </div>
+    <button @onclick="LoadMoreCards">Load More</button>
 }
 
 @code {
-    private string searchTerm = "";
-    private string filterOption = "";
     private List<Card>? cards;
     private int pageNumber = 1;
     private const int pageSize = 50;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadCards();
+        await LoadMoreCards();
     }
 
-    private async Task LoadCards()
+    private async Task LoadMoreCards()
     {
-        cards = await service.GetCards(searchTerm, filterOption, pageNumber, pageSize);
-    }
-
-    private async Task NextPage()
-    {
-        pageNumber++;
-        Console.WriteLine(pageNumber);
-        await LoadCards();
-        Console.WriteLine(pageNumber);
-    }
-
-    private async Task PreviousPage()
-    {
-        if (pageNumber > 1)
+        var newCards = await service.GetCards(pageNumber, pageSize);
+        if (cards == null)
         {
-            pageNumber--;
-            await LoadCards();
+            cards = newCards;
         }
+        else
+        {
+            cards.AddRange(newCards);
+        }
+        pageNumber++;
     }
 }
