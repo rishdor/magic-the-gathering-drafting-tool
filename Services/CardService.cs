@@ -40,61 +40,53 @@ public class CardService(IDbContextFactory<MagickContext> factory)
     public async Task<List<Card>> GetCards(string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
-        var cardsQuery = context.Cards
+        IQueryable<Card> cardsQuery = context.Cards
             .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl))
             .OrderBy(card => card.Name);
-    
+
         if (!string.IsNullOrEmpty(lastName))
         {
-            cardsQuery = (IOrderedQueryable<Card>)cardsQuery.OrderBy(card => card.Name).Where(card => String.Compare(card.Name, lastName) > 0);
+            cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
         }
-    
+
         var paginatedCards = await cardsQuery
             .Take(pageSize)
             .ToListAsync();
-    
+
         return paginatedCards;
     }
-    
+
     public async Task<List<Card>> SearchCard(string query, string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
-        var cardsQuery = context.Cards
+        IQueryable<Card> cardsQuery = context.Cards
             .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl))
-            .OrderBy(card => card.Name)
-            .AsQueryable();
-    
+            .OrderBy(card => card.Name);
+
         if (!string.IsNullOrEmpty(query))
         {
             cardsQuery = ApplySearch(cardsQuery, query, context);
         }
-    
+
         if (!string.IsNullOrEmpty(lastName))
         {
-            cardsQuery = cardsQuery.Where(card => String.Compare(card.Name, lastName) > 0);
+            cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
         }
-    
+
         var paginatedCards = await cardsQuery
             .Take(pageSize)
             .ToListAsync();
-    
+
         return paginatedCards;
     }
 
     private IQueryable<Card> ApplySearch(IQueryable<Card> cardsQuery, string query, MagickContext context)
     {
         return from card in cardsQuery
-            join set in context.Sets on card.SetCode equals set.Code
-            where card.Name.ToLower().Contains(query.ToLower()) || set.Name.ToLower().Contains(query.ToLower())
-            select card;
-    }
-
-    private async Task<List<Card>> ApplyPagination(IQueryable<Card> cardsQuery, long lastCardId, int pageSize)
-    {
-        return await cardsQuery
-            .Where(card => card.Id > lastCardId && !string.IsNullOrEmpty(card.OriginalImageUrl))
-            .OrderBy(card => card.Id)
-            .Take(pageSize)
-            .ToListAsync();
+                join set in context.Sets on card.SetCode equals set.Code
+                where card.Name.ToLower().Contains(query.ToLower()) 
+                        || set.Name.ToLower().Contains(query.ToLower())
+                        || set.Code.ToLower().Contains(query.ToLower())
+                select card;
     }
 }
