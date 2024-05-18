@@ -27,14 +27,16 @@ namespace magick.Components.Pages
 
         protected async Task SearchCards()
         {
+            NoMatchingCardsError = "no-matching-cards-error";
             string lastName = string.Empty;
             allCards = await service!.SearchCard(searchQuery, lastName, pageSize);
             cards!.Clear();
             cards.AddRange(allCards.Take(pageSize));
         }
-
+        
         protected async Task FilterCards()
         {
+            NoMatchingCardsError = "no-matching-cards-error";
             string lastName = string.Empty;
             allCards = await service!.FilterCards(searchQuery, lastName, pageSize, convertedManaCostFilter, typeFilter, rarityCodeFilter, colorFilter);
             cards!.Clear();
@@ -43,6 +45,7 @@ namespace magick.Components.Pages
         
         protected async Task LoadMoreCards()
         {
+            NoMatchingCardsError = "no-matching-cards-error";
             string lastName = cards!.Any() ? cards!.Last().Name : string.Empty;
             List<Card> moreCards;
         
@@ -67,6 +70,11 @@ namespace magick.Components.Pages
         protected async Task ResetSearch()
         {
             searchQuery = "";
+            convertedManaCostFilter = null;
+            typeFilter = null;
+            rarityCodeFilter = null;
+            colorFilter = null;
+            NoMatchingCardsError = "no-matching-cards-error";
             allCards = null;
             cards!.Clear();
             await LoadMoreCards();
