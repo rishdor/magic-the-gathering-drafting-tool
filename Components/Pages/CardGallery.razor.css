@@ -4,12 +4,6 @@ h1 {
     padding: 10px;
 }
 
-.card-name {
-    text-align: center;
-    padding: 10px 0 0 0;
-    font-size: larger;
-}
-
 .loading {
     position: fixed;
     top: 50%;
@@ -39,12 +33,18 @@ h1 {
     height: auto;
 }
 
+.card-name {
+    text-align: center;
+    padding: 10px 0 0 0;
+    font-size: larger;
+}
+
 .load-more-button {
     display: block;
     width: 200px;
     height: 50px;
     margin: 20px auto;
-    background-color: #4CAF50;
+    background-color: #69527a;
     color: white;
     text-align: center;
     text-decoration: none;
@@ -52,18 +52,86 @@ h1 {
     transition-duration: 0.4s;
     cursor: pointer;
     border-radius: 12px;
-    padding: 14px 40px;
+    padding: 20px 0 40px 0;
     border: none;
     outline: none;
-    padding: 20px 0 40px 0;
 }
 
 .load-more-button:hover {
     background-color: white; 
     color: black; 
-    border: 2px solid #4CAF50;
+    border: 2px solid  #69527a;
 }
 
 footer {
     height: 50px;
+}
+
+.search-filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-filter-container > div {
+    display: flex;
+    gap: 10px;
+}
+
+.search-filter-container input,
+.search-filter-container select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-filter-container input {
+    width: 200px;
+}
+
+.search-filter-container select {
+    width: 150px;
+}
+
+.search-filter-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #69527a;
+    color: white;
+    cursor: pointer;
+}
+
+.search-filter-container button:hover {
+    background-color: #573f64;
+}
+
+.search-filter-container button.reset {
+    background-color: #812525;
+}
+
+.search-filter-container button.reset:hover {
+    background-color: #8a4d4d;
+}
+
+.no-matching-cards-error {
+    display: none;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 20px;
+    color: #812525;
+}
+
+.matching-cards-error {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 20px;
+    color: #812525;
 }
