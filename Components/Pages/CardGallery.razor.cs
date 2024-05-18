@@ -17,7 +17,7 @@ namespace magick.Components.Pages
         string? typeFilter = null;
         string? rarityCodeFilter = null;
         string? colorFilter = null;
-        string NoMatchingCardsError = "No";
+        string NoMatchingCardsError = "no-matching-cards-error";
 
         protected override async Task OnInitializedAsync()
         {
@@ -57,8 +57,8 @@ namespace magick.Components.Pages
         
             if (!moreCards.Any())
             {
-                NoMatchingCardsError = "visible"; // Set the class to make the error visible
-                return; // Return from the method to avoid adding random cards
+                NoMatchingCardsError = "matching-cards-error";
+                return;
             }
         
             cards!.AddRange(moreCards);

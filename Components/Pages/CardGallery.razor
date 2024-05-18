@@ -116,11 +116,20 @@
         background-color: #8a4d4d;
     }
 
-    #no-matching-cards-error {
+    .no-matching-cards-error {
         display: none;
         text-align: center;
         font-weight: bold;
-        text-size: 20px;
+        font-size: 20px;
+        padding: 20px;
+        color: #812525;
+    }
+    
+    .matching-cards-error {
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
         padding: 20px;
         color: #812525;
     }
@@ -229,7 +238,7 @@
         }
         </div>
         <button class="load-more-button" @onclick="LoadMoreCards">Load More</button>
-        <p id="no-matching-cards-error" bind="@NoMatchingCardsError">No more cards matching the criteria</p>
+        <p class="@NoMatchingCardsError">No more cards matching the criteria</p>
         <footer></footer>
     }
 </div>
