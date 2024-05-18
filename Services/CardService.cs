@@ -168,28 +168,40 @@ public class CardService(IDbContextFactory<MagickContext> factory)
 
     public async Task<List<Card>> FilterCards(string query, string lastName, int pageSize, int? convertedManaCost = null, string? type = null, string? rarityCode = null, string? color = null)
     {
-        List<Card> cards = new List<Card>();
-
+        using MagickContext context = _factory.CreateDbContext();
+        IQueryable<Card> cardsQuery = context.Cards
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl));
+    
         if (convertedManaCost.HasValue)
         {
-            cards.AddRange(await FilterByConvertedManaCost(convertedManaCost.Value, lastName, pageSize));
+            cardsQuery = cardsQuery.Where(card => card.ConvertedManaCost == convertedManaCost.ToString());
         }
-
+    
         if (!string.IsNullOrEmpty(type))
         {
-            cards.AddRange(await FilterByType(type, lastName, pageSize));
+            cardsQuery = cardsQuery.Where(card => card.CardTypes.Any(ct => ct.Type.Name == type));
         }
-
+    
         if (!string.IsNullOrEmpty(rarityCode))
         {
-            cards.AddRange(await FilterByRarityCode(rarityCode, lastName, pageSize));
+            cardsQuery = cardsQuery.Where(card => card.RarityCode == rarityCode);
         }
-
+    
         if (!string.IsNullOrEmpty(color))
         {
-            cards.AddRange(await FilterByColor(color, lastName, pageSize));
+            cardsQuery = cardsQuery.Where(card => card.CardColors.Any(cc => cc.Color.Name == color));
         }
-
-        return cards;
+    
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
+        }
+    
+        var paginatedCards = await cardsQuery
+            .OrderBy(card => card.Name)
+            .Take(pageSize)
+            .ToListAsync();
+    
+        return paginatedCards;
     }
 }
