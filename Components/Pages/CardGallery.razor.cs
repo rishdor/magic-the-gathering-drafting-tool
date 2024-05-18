@@ -17,7 +17,7 @@ namespace magick.Components.Pages
         string? typeFilter = null;
         string? rarityCodeFilter = null;
         string? colorFilter = null;
-        string NoMatchingCardsError = "";
+        string NoMatchingCardsError = "No";
 
         protected override async Task OnInitializedAsync()
         {
@@ -46,9 +46,8 @@ namespace magick.Components.Pages
             string lastName = cards!.Any() ? cards!.Last().Name : string.Empty;
             List<Card> moreCards;
         
-            if (string.IsNullOrEmpty(searchQuery))
+            if (string.IsNullOrEmpty(searchQuery) && convertedManaCostFilter == null && typeFilter == null && rarityCodeFilter == null && colorFilter == null)
             {
-                NoMatchingCardsError = "visible";
                 moreCards = await service!.GetCards(lastName, pageSize);
             }
             else
@@ -56,12 +55,10 @@ namespace magick.Components.Pages
                 moreCards = await service!.FilterCards(searchQuery, lastName, pageSize, convertedManaCostFilter, typeFilter, rarityCodeFilter, colorFilter);
             }
         
-            Console.WriteLine($"LoadMoreCards: {moreCards.Count} more cards found"); // Add logging
-        
             if (!moreCards.Any())
             {
-                // NoMatchingCardsError = "visible";
-                return;
+                NoMatchingCardsError = "visible"; // Set the class to make the error visible
+                return; // Return from the method to avoid adding random cards
             }
         
             cards!.AddRange(moreCards);
