@@ -18,13 +18,14 @@ namespace magick.Components.Pages
         string? rarityCodeFilter = null;
         string? colorFilter = null;
         string NoMatchingCardsError = "no-matching-cards-error";
+        protected string NoMatchingCardsMessage = "";
 
         protected override async Task OnInitializedAsync()
         {
             cards = new List<Card>();
             await LoadMoreCards();
         }
-
+        
         protected async Task SearchCards()
         {
             NoMatchingCardsError = "no-matching-cards-error";
@@ -32,6 +33,12 @@ namespace magick.Components.Pages
             allCards = await service!.SearchCard(searchQuery, lastName, pageSize);
             cards!.Clear();
             cards.AddRange(allCards.Take(pageSize));
+        
+            if (!allCards.Any())
+            {
+                NoMatchingCardsError = "matching-cards-error";
+                NoMatchingCardsMessage = "No cards matching the criteria";
+            }
         }
         
         protected async Task FilterCards()
@@ -41,6 +48,12 @@ namespace magick.Components.Pages
             allCards = await service!.FilterCards(searchQuery, lastName, pageSize, convertedManaCostFilter, typeFilter, rarityCodeFilter, colorFilter);
             cards!.Clear();
             cards.AddRange(allCards.Take(pageSize));
+        
+            if (!allCards.Any())
+            {
+                NoMatchingCardsError = "matching-cards-error";
+                NoMatchingCardsMessage = "No cards matching the criteria";
+            }
         }
         
         protected async Task LoadMoreCards()
@@ -61,7 +74,7 @@ namespace magick.Components.Pages
             if (!moreCards.Any())
             {
                 NoMatchingCardsError = "matching-cards-error";
-                return;
+                NoMatchingCardsMessage = "No more cards matching the criteria";
             }
         
             cards!.AddRange(moreCards);
