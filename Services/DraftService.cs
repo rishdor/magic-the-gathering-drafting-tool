@@ -33,10 +33,8 @@ public class DraftService(CardService cardService, UserService userService, IDbC
             UserId =  (await _userService.GetUser())!.Id,
             DeckName = deckName
         };
-        Console.WriteLine(deck.Id);
         context.UserDecks.Add(deck);
         await context.SaveChangesAsync();
-        Console.WriteLine(deck.Id);
 
         List<DeckCard> deckCards = (
             from card in GetDeck()
