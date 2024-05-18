@@ -7,16 +7,27 @@ namespace magick.Components.Pages;
 
 public partial class Setup {
     [Inject] public CardService? CardService { get; set; }
+    [Inject] public UserService? UserService { get; set; }
+    [Inject] public NavigationManager? NavManager { get; set; }
+   
     [SupplyParameterFromForm] public SetQuery Query { get; set; } = new();
 
     private List<Set> sets = [];
     
-
-    protected override void OnInitialized()
-        => FilterSets();
-
-    private void FilterSets()
+    protected override async Task OnInitializedAsync()
     {
-        sets = CardService!.GetSets(Query.Text);
+        var user = await UserService!.GetUser();
+        if (user == null)
+        {
+            NavManager!.NavigateTo("/login");
+        }
+        else
+        {
+            await FilterSets();
+        }
+    }
+    private async Task FilterSets()
+    {
+        sets = await CardService!.GetSets(Query.Text);
     }
 }

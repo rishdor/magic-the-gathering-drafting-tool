@@ -29,12 +29,12 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         return context.Colors.ToList();
     }
     
-    public List<Set> GetSets(string query)
+    public async Task<List<Set>> GetSets(string query)
     {
         using MagickContext context = _factory.CreateDbContext();
-        return (from set in context.Sets
+        return await (from set in context.Sets
             where set.Name.ToLower().Contains(query.ToLower())
-            select set).ToList();
+            select set).ToListAsync();
     }
 
     public async Task<List<Card>> GetCards(string lastName, int pageSize)

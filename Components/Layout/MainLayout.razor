@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@inject AppState AppState
 
 <div class="page">
     <main>
         <div class="top-row px-4">
             <a href="/" class="title">Magic The Gathering</a>
             <a href="/cards">Card Gallery</a>
+            @if (AppState.IsUserLoggedIn)
+            {
+                <a href="/decks">Decks</a>
+            }
             <Profile />
         </div>
 
@@ -19,3 +24,15 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        AppState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+    }
+}

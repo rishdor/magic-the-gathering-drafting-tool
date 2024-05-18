@@ -1,23 +1,30 @@
 ﻿@page "/"
+@inject NavigationManager _nav
 
 <PageTitle>Home</PageTitle>
 
-<h1>Welcome to our awsome drafting tool.</h1>
 
+<div class="container">
 
-<p>
-    Welcome to our Magic: The Gathering Draft Tool - your ultimate companion for solo drafting adventures! 
-</p>
-<p>
-    Whether you're a seasoned Planeswalker or just beginning your journey into the multiverse, our tool is designed to enhance your drafting experience and help you build powerful decks to conquer your opponents.
-</p>
+    <h1>Welcome to our awsome drafting tool.</h1>
 
-<h2>How to Draft:</h2>
-<ol>
-    <li><b>Start Draft:</b> Begin by selecting your preferred card set.</li>
-    <li><b>Pack Selection:</b> Each drafting round starts with a pack of cards. Review the cards carefully, considering their mana costs, abilities, and synergy with your deck strategy.</li>
-    <li><b>Pick a Card:</b> Choose the card that best fits your deck's theme and strategy by clicking on it.</li>
-    <li><b>Build Your Deck:</b> Repeat the process for multiple rounds until you've completed your deck with a specified number of cards.</li>
-    <li><b>Fine-Tune Your Deck:</b> After drafting, you can adjust your deck by adding or removing cards to optimize its strength and synergy.</li>
-    <li><b>Play and Conquer:</b> With your drafted deck ready, it's time to test your skills in battles against opponents or challenges.</li>
-</ol>
+    <p>
+        Welcome to our Magic: The Gathering Draft Tool - your ultimate companion for solo drafting adventures! 
+    </p>
+    <p>
+        Whether you're a seasoned Planeswalker or just beginning your journey into the multiverse, our tool is designed to enhance your drafting experience and help you build powerful decks to conquer your opponents.
+    </p>
+
+    <h2>How to Draft:</h2>
+    <ol>
+        <li><b>Start Draft:</b> Begin by selecting your preferred card set.</li>
+        <li><b>Pack Selection:</b> Each drafting round starts with a pack of cards. Review the cards carefully, considering their mana costs, abilities, and synergy with your deck strategy.</li>
+        <li><b>Pick a Card:</b> Choose the card that best fits your deck's theme and strategy by clicking on it.</li>
+        <li><b>Build Your Deck:</b> Repeat the process for multiple rounds until you've completed your deck with a specified number of cards.</li>
+        <li><b>Fine-Tune Your Deck:</b> After drafting, you can adjust your deck by adding or removing cards to optimize its strength and synergy.</li>
+        <li><b>Play and Conquer:</b> With your drafted deck ready, it's time to test your skills in battles against opponents or challenges.</li>
+    </ol>
+
+    <button class="btn" onclick='@(()=>_nav.NavigateTo("/setup"))'>Start drafting</button>
+
+</div>
