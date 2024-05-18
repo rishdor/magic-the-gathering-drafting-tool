@@ -1,0 +1,10 @@
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-name {
+    text-align: center;
+    padding: 10px 0 0 0;
+    font-size: larger;
+}
