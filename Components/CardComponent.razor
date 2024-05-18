@@ -9,8 +9,8 @@
     public Card? card { get; set; }
     private CardDetailsPopup? popup;
 
-    private void CardPopup()
+    private async Task CardPopup()
     {
-        popup!.Show(card!);
+        await popup!.Show(card!);
     }
 }
