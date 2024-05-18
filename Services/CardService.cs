@@ -36,4 +36,57 @@ public class CardService(IDbContextFactory<MagickContext> factory)
             where set.Name.ToLower().Contains(query.ToLower())
             select set).ToList();
     }
+
+    public async Task<List<Card>> GetCards(string lastName, int pageSize)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        IQueryable<Card> cardsQuery = context.Cards
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl))
+            .OrderBy(card => card.Name);
+
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
+        }
+
+        var paginatedCards = await cardsQuery
+            .Take(pageSize)
+            .ToListAsync();
+
+        return paginatedCards;
+    }
+
+    public async Task<List<Card>> SearchCard(string query, string lastName, int pageSize)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        IQueryable<Card> cardsQuery = context.Cards
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl))
+            .OrderBy(card => card.Name);
+
+        if (!string.IsNullOrEmpty(query))
+        {
+            cardsQuery = ApplySearch(cardsQuery, query, context);
+        }
+
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
+        }
+
+        var paginatedCards = await cardsQuery
+            .Take(pageSize)
+            .ToListAsync();
+
+        return paginatedCards;
+    }
+
+    private IQueryable<Card> ApplySearch(IQueryable<Card> cardsQuery, string query, MagickContext context)
+    {
+        return from card in cardsQuery
+                join set in context.Sets on card.SetCode equals set.Code
+                where card.Name.ToLower().Contains(query.ToLower()) 
+                        || set.Name.ToLower().Contains(query.ToLower())
+                        || set.Code.ToLower().Contains(query.ToLower())
+                select card;
+    }
 }
