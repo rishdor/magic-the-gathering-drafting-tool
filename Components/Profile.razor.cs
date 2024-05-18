@@ -14,7 +14,7 @@ public partial class Profile
     [Inject] public AppState? AppState { get; set; }
 
     [Inject] public NavigationManager? NavigationManager { get; set; }
-    
+
     protected override void OnInitialized()
     {
         UserService!.LoggedIn += OnLoggedInOut;
@@ -34,7 +34,7 @@ public partial class Profile
         IsLoggedIn = user != null;
         AppState!.IsUserLoggedIn = IsLoggedIn;
         AppState.NotifyStateChanged();
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     public async void Logout() 
@@ -44,7 +44,7 @@ public partial class Profile
         IsLoggedIn = false;
         AppState!.IsUserLoggedIn = IsLoggedIn;
         AppState.NotifyStateChanged();
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         NavigationManager?.NavigateTo("/");
     }
 
