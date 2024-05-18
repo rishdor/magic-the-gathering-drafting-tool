@@ -13,6 +13,10 @@ namespace magick.Components.Pages
         private const int pageSize = 50;
         string searchQuery = "";
         List<Card>? allCards;
+        int? convertedManaCostFilter = null;
+        string? typeFilter = null;
+        string? rarityCodeFilter = null;
+        string? colorFilter = null;
 
         protected override async Task OnInitializedAsync()
         {
@@ -23,7 +27,7 @@ namespace magick.Components.Pages
         protected async Task SearchCards()
         {
             string lastName = string.Empty;
-            allCards = await service!.SearchCard(searchQuery, lastName, pageSize);
+            allCards = await service!.FilterCards(searchQuery, lastName, pageSize, convertedManaCostFilter, typeFilter, rarityCodeFilter, colorFilter);
             cards!.Clear();
             cards.AddRange(allCards.Take(pageSize));
         }
@@ -38,7 +42,7 @@ namespace magick.Components.Pages
             }
             else
             {
-                var moreCards = await service!.SearchCard(searchQuery, lastName, pageSize);
+                var moreCards = await service!.FilterCards(searchQuery, lastName, pageSize, convertedManaCostFilter, typeFilter, rarityCodeFilter, colorFilter);
                 cards!.AddRange(moreCards);
             }
         }

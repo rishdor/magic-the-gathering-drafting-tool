@@ -94,64 +94,64 @@ public class CardService(IDbContextFactory<MagickContext> factory)
     {
         using MagickContext context = _factory.CreateDbContext();
         IQueryable<Card> cardsQuery = context.Cards
-            .Where(card => card.ConvertedManaCost == convertedManaCost.ToString())
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl) && card.ConvertedManaCost == convertedManaCost.ToString())
             .OrderBy(card => card.Name);
-
+    
         if (!string.IsNullOrEmpty(lastName))
         {
             cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
         }
-
+    
         var paginatedCards = await cardsQuery
             .Take(pageSize)
             .ToListAsync();
-
+    
         return paginatedCards;
     }
-
-   public async Task<List<Card>> FilterByType(string typeName, string lastName, int pageSize)
+    
+    public async Task<List<Card>> FilterByType(string typeName, string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         IQueryable<Card> cardsQuery = context.Cards
-            .Where(card => card.CardTypes.Any(ct => ct.Type.Name == typeName));
-
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl) && card.CardTypes.Any(ct => ct.Type.Name == typeName));
+    
         if (!string.IsNullOrEmpty(lastName))
         {
             cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
         }
-
+    
         var paginatedCards = await cardsQuery
             .OrderBy(card => card.Name)
             .Take(pageSize)
             .ToListAsync();
-
+    
         return paginatedCards;
     }
-
+    
     public async Task<List<Card>> FilterByRarityCode (string rarityCode, string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         IQueryable<Card> cardsQuery = context.Cards
-            .Where(card => card.RarityCode == rarityCode)
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl) && card.RarityCode == rarityCode)
             .OrderBy(card => card.Name);
-
+    
         if (!string.IsNullOrEmpty(lastName))
         {
             cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
         }
-
+    
         var paginatedCards = await cardsQuery
             .Take(pageSize)
             .ToListAsync();
-
+    
         return paginatedCards;
     }
-
+    
     public async Task<List<Card>> FilterByColor(string colorName, string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         IQueryable<Card> cardsQuery = context.Cards
-            .Where(card => card.CardColors.Any(cc => cc.Color.Name == colorName));
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl) && card.CardColors.Any(cc => cc.Color.Name == colorName));
     
         if (!string.IsNullOrEmpty(lastName))
         {

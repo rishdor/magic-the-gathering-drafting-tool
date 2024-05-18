@@ -101,6 +101,36 @@
     .search-container button:hover {
         background-color: #45a049;
     }
+
+    .filter-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .filter-container select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 150px;
+    }
+
+    .filter-container button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+    }
+
+    .filter-container button:hover {
+        background-color: #45a049;
+    }
 </style>
 
 <h1>Card Gallery</h1>
@@ -109,6 +139,26 @@
     <input type="text" @bind="searchQuery" placeholder="Search cards..." />
     <button @onclick="SearchCards">Search</button>
     <button @onclick="ResetSearch">Reset</button>
+</div>
+
+<div class="filter-container">
+    <select @bind="convertedManaCostFilter">
+        <option value="">Select Mana Cost</option>
+        <option value="5">5</option>
+    </select>
+    <select @bind="typeFilter">
+        <option value="">Select Type</option>
+        <option value="Artifact">Artifact</option>
+    </select>
+    <select @bind="rarityCodeFilter">
+        <option value="">Select Rarity Code</option>
+        <option value="C">Common</option>
+    </select>
+    <select @bind="colorFilter">
+        <option value="">Select Color</option>
+        <option value="White">White</option>
+    </select>
+    <button @onclick="SearchCards">Apply Filters</button>
 </div>
 
 <div>
