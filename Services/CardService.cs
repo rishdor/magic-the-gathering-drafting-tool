@@ -89,4 +89,43 @@ public class CardService(IDbContextFactory<MagickContext> factory)
                         || set.Code.ToLower().Contains(query.ToLower())
                 select card;
     }
+
+    public async Task<List<Card>> FilterCards(string query, string lastName, int pageSize, int? convertedManaCost = null, string? type = null, string? rarityCode = null, string? color = null)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        IQueryable<Card> cardsQuery = context.Cards
+            .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl));
+    
+        if (convertedManaCost.HasValue)
+        {
+            cardsQuery = cardsQuery.Where(card => card.ConvertedManaCost == convertedManaCost.ToString());
+        }
+    
+        if (!string.IsNullOrEmpty(type))
+        {
+            cardsQuery = cardsQuery.Where(card => card.CardTypes.Any(ct => ct.Type.Name == type));
+        }
+    
+        if (!string.IsNullOrEmpty(rarityCode))
+        {
+            cardsQuery = cardsQuery.Where(card => card.RarityCode == rarityCode);
+        }
+    
+        if (!string.IsNullOrEmpty(color))
+        {
+            cardsQuery = cardsQuery.Where(card => card.CardColors.Any(cc => cc.Color.Name == color));
+        }
+    
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            cardsQuery = cardsQuery.Where(card => string.Compare(card.Name, lastName) > 0);
+        }
+    
+        var paginatedCards = await cardsQuery
+            .OrderBy(card => card.Name)
+            .Take(pageSize)
+            .ToListAsync();
+    
+        return paginatedCards;
+    }
 }
