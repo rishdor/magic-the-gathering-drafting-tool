@@ -26,6 +26,11 @@ public class UserService(IDbContextFactory<MagickContext> factory, ProtectedLoca
         return _user;
     }
 
+    //  public bool IsUserLoggedIn()
+    // {
+    //     return GetUser().Result != null;
+    // }
+
     public async Task<User?> GetUser(string username)
     {
         using var context = _factory.CreateDbContext();

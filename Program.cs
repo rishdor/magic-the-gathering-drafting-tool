@@ -17,6 +17,8 @@ builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<DraftService>();
 builder.Services.AddScoped<DeckService>();
 builder.Services.AddScoped<SetService>();
+// builder.Services.AddScoped<AppState>();
+builder.Services.AddSingleton<AppState>();
 
 builder.Services.AddDbContextFactory<MagickContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
