@@ -48,7 +48,7 @@
         width: 200px;
         height: 50px;
         margin: 20px auto;
-        background-color: #4CAF50;
+        background-color: #69527a;
         color: white;
         text-align: center;
         text-decoration: none;
@@ -65,7 +65,7 @@
     .load-more-button:hover {
         background-color: white; 
         color: black; 
-        border: 2px solid #4CAF50;
+        border: 2px solid  #69527a;
     }
 
     footer {
@@ -93,13 +93,13 @@
         font-size: 16px;
         border: none;
         border-radius: 4px;
-        background-color: #4CAF50;
+        background-color: #69527a;
         color: white;
         cursor: pointer;
     }
 
     .search-container button:hover {
-        background-color: #45a049;
+        background-color: #69527a;
     }
 
     .filter-container {
@@ -123,42 +123,136 @@
         font-size: 16px;
         border: none;
         border-radius: 4px;
-        background-color: #4CAF50;
+        background-color: #69527a;
         color: white;
         cursor: pointer;
     }
 
     .filter-container button:hover {
-        background-color: #45a049;
+        background-color: #69527a;
+    }
+
+    .search-filter-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .search-filter-container > div {
+        display: flex;
+        gap: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #69527a;
+        color: white;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #573f64;
+    }
+    
+    button.reset {
+        background-color: #812525;
+    }
+    
+    button.reset:hover {
+        background-color: #8a4d4d;
     }
 </style>
 
 <h1>Card Gallery</h1>
 
-<div class="search-container">
-    <input type="text" @bind="searchQuery" placeholder="Search cards..." />
-    <button @onclick="SearchCards">Search</button>
-    <button @onclick="ResetSearch">Reset</button>
-</div>
+<div class="search-filter-container">
+    <div>
+        <div class="search-container">
+            <input type="text" @bind="searchQuery" placeholder="Search cards..." />
+            <button @onclick="SearchCards">Search</button>
+        </div>
 
-<div class="filter-container">
-    <select @bind="convertedManaCostFilter">
-        <option value="">Select Mana Cost</option>
-        <option value="5">5</option>
-    </select>
-    <select @bind="typeFilter">
-        <option value="">Select Type</option>
-        <option value="Artifact">Artifact</option>
-    </select>
-    <select @bind="rarityCodeFilter">
-        <option value="">Select Rarity Code</option>
-        <option value="C">Common</option>
-    </select>
-    <select @bind="colorFilter">
-        <option value="">Select Color</option>
-        <option value="White">White</option>
-    </select>
-    <button @onclick="SearchCards">Apply Filters</button>
+        <div class="filter-container">
+            <select @bind="convertedManaCostFilter">
+                <option value="">Mana Cost</option>
+                <option value="0">0</option>
+                <option value="0.5">0.5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="1000000">1000000</option>
+            </select>
+            <select @bind="typeFilter">
+                <option value="">Type</option>
+                <option value="Artifact">Artifact</option>
+                <option value="Wolf">Wolf</option>
+                <option value="Knights">Knights</option>
+                <option value="Instant">Instant</option>
+                <option value="Planeswalker">Planeswalker</option>
+                <option value="Jaguar">Jaguar</option>
+                <option value="Goblin">Goblin</option>
+                <option value="See">See</option>
+                <option value="Enchantment">Enchantment</option>
+                <option value="Elemental">Elemental</option>
+                <option value="Scariest">Scariest</option>
+                <option value="Hero">Hero</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Land">Land</option>
+                <option value="Tribal">Tribal</option>
+                <option value="Specter">Specter</option>
+                <option value="Eaturecray">Eaturecray</option>
+                <option value="Summon">Summon</option>
+                <option value="Scheme">Scheme</option>
+                <option value="Ever">Ever</option>
+                <option value="Phenomenon">Phenomenon</option>
+                <option value="Creature">Creature</option>
+                <option value="Vanguard">Vanguard</option>
+                <option value="You’ll">You’ll</option>
+                <option value="Plane">Plane</option>
+                <option value="Sorcery">Sorcery</option>
+                <option value="Conspiracy">Conspiracy</option>
+            </select>
+            <select @bind="rarityCodeFilter">
+                <option value="">Rarity Code</option>
+                <option value="C">Common</option>
+                <option value="U">Uncommon</option>
+                <option value="R">Rare</option>
+                <option value="M">Mythic</option>
+                <option value="S">Special</option>
+                <option value="B">Bonus</option>
+            </select>
+            <select @bind="colorFilter">
+                <option value="">Color</option>
+                <option value="White">White</option>
+                <option value="Black">Black</option>
+                <option value="Blue">Blue</option>
+                <option value="Red">Red</option>
+                <option value="Green">Green</option>
+                <option value="Colorless">Colorless</option>
+            </select>
+            <button @onclick="SearchCards">Apply Filters</button>
+        </div>
+    </div>
+
+    <button class = "reset" @onclick="ResetSearch">Reset</button>
 </div>
 
 <div>
