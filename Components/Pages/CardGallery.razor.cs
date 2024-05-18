@@ -10,7 +10,6 @@ namespace magick.Components.Pages
         protected CardService? service { get; set; }
 
         protected List<Card>? cards;
-        private long lastCardId = 0;
         private const int pageSize = 50;
         string searchQuery = "";
         List<Card>? allCards;
@@ -23,31 +22,24 @@ namespace magick.Components.Pages
 
         protected async Task SearchCards()
         {
-            allCards = await service!.SearchCard(searchQuery);
+            string lastName = cards!.Any() ? cards!.Last().Name : string.Empty;
+            allCards = await service!.SearchCard(searchQuery, lastName, pageSize);
             cards!.Clear();
             cards.AddRange(allCards.Take(pageSize));
-            lastCardId = cards.Last().Id;
         }
-
+        
         protected async Task LoadMoreCards()
         {
+            string lastName = cards!.Any() ? cards!.Last().Name : string.Empty;
             if (string.IsNullOrEmpty(searchQuery))
             {
-                var moreCards = await service!.GetCards(lastCardId, pageSize);
+                var moreCards = await service!.GetCards(lastName, pageSize);
                 cards!.AddRange(moreCards);
-                if (moreCards.Any())
-                {
-                    lastCardId = moreCards.Last().Id;
-                }
             }
             else
             {
-                var moreCards = allCards!.SkipWhile(card => card.Id <= lastCardId).Take(pageSize).ToList();
+                var moreCards = await service!.SearchCard(searchQuery, lastName, pageSize);
                 cards!.AddRange(moreCards);
-                if (moreCards.Any())
-                {
-                    lastCardId = moreCards.Last().Id;
-                }
             }
         }
 

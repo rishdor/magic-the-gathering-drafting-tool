@@ -37,33 +37,48 @@ public class CardService(IDbContextFactory<MagickContext> factory)
             select set).ToList();
     }
 
-    public async Task<List<Card>> GetCards(long lastCardId, int pageSize)
+    public async Task<List<Card>> GetCards(string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         var cardsQuery = context.Cards
             .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl))
-            .OrderBy(card => card.Name)
-            .AsQueryable();
-
-        var paginatedCards = await ApplyPagination(cardsQuery, lastCardId, pageSize);
-
+            .OrderBy(card => card.Name);
+    
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            cardsQuery = (IOrderedQueryable<Card>)cardsQuery.OrderBy(card => card.Name).Where(card => String.Compare(card.Name, lastName) > 0);
+        }
+    
+        var paginatedCards = await cardsQuery
+            .Take(pageSize)
+            .ToListAsync();
+    
         return paginatedCards;
     }
-
-    public async Task<List<Card>> SearchCard(string query)
+    
+    public async Task<List<Card>> SearchCard(string query, string lastName, int pageSize)
     {
         using MagickContext context = _factory.CreateDbContext();
         var cardsQuery = context.Cards
             .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl))
             .OrderBy(card => card.Name)
             .AsQueryable();
-
+    
         if (!string.IsNullOrEmpty(query))
         {
             cardsQuery = ApplySearch(cardsQuery, query, context);
         }
-
-        return await cardsQuery.ToListAsync();
+    
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            cardsQuery = cardsQuery.Where(card => String.Compare(card.Name, lastName) > 0);
+        }
+    
+        var paginatedCards = await cardsQuery
+            .Take(pageSize)
+            .ToListAsync();
+    
+        return paginatedCards;
     }
 
     private IQueryable<Card> ApplySearch(IQueryable<Card> cardsQuery, string query, MagickContext context)
