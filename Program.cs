@@ -13,9 +13,9 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<UserLogin>();
 builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<DraftService>();
+builder.Services.AddScoped<DeckService>();
 builder.Services.AddScoped<SetService>();
 
 builder.Services.AddDbContextFactory<MagickContext>(options =>
