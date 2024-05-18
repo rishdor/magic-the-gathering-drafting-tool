@@ -22,7 +22,7 @@ namespace magick.Components.Pages
 
         protected async Task SearchCards()
         {
-            string lastName = cards!.Any() ? cards!.Last().Name : string.Empty;
+            string lastName = string.Empty;
             allCards = await service!.SearchCard(searchQuery, lastName, pageSize);
             cards!.Clear();
             cards.AddRange(allCards.Take(pageSize));
