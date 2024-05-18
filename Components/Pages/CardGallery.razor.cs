@@ -13,45 +13,50 @@ namespace magick.Components.Pages
         private long lastCardId = 0;
         private const int pageSize = 50;
         string searchQuery = "";
+        List<Card>? allCards;
 
         protected override async Task OnInitializedAsync()
         {
+            cards = new List<Card>();
             await LoadMoreCards();
-        }
-
-        protected async Task LoadMoreCards()
-        {
-            var newCards = await service!.GetCards(lastCardId, pageSize);
-            if (cards == null)
-            {
-                cards = newCards;
-            }
-            else
-            {
-                cards.AddRange(newCards);
-            }
-            if (newCards.Any())
-            {
-                lastCardId = newCards.Last().Id;
-            }
         }
 
         protected async Task SearchCards()
         {
-            var searchedCards = await service!.SearchCard(searchQuery, lastCardId, pageSize);
-            if (cards == null)
+            allCards = await service!.SearchCard(searchQuery);
+            cards!.Clear();
+            cards.AddRange(allCards.Take(pageSize));
+            lastCardId = cards.Last().Id;
+        }
+
+        protected async Task LoadMoreCards()
+        {
+            if (string.IsNullOrEmpty(searchQuery))
             {
-                cards = searchedCards;
+                var moreCards = await service!.GetCards(lastCardId, pageSize);
+                cards!.AddRange(moreCards);
+                if (moreCards.Any())
+                {
+                    lastCardId = moreCards.Last().Id;
+                }
             }
             else
             {
-                cards.Clear();
-                cards.AddRange(searchedCards);
+                var moreCards = allCards!.SkipWhile(card => card.Id <= lastCardId).Take(pageSize).ToList();
+                cards!.AddRange(moreCards);
+                if (moreCards.Any())
+                {
+                    lastCardId = moreCards.Last().Id;
+                }
             }
-            if (searchedCards.Any())
-            {
-                lastCardId = searchedCards.Last().Id;
-            }
+        }
+
+        protected async Task ResetSearch()
+        {
+            searchQuery = "";
+            allCards = null;
+            cards!.Clear();
+            await LoadMoreCards();
         }
     }
 }
