@@ -3,11 +3,15 @@
 
 @if(user == null)
 {
-    <a href="/login" class="title">Login</a>
+    <div class="imposter">
+        <a class = "link" href="/login">Login</a>
+    </div>
 }
 else
 {
-    <a class="nav" @onclick="@(() => Nav.NavigateTo("/decks"))">My Decks</a>
-    <a class="title" @onclick="Logout" @onclick:preventDefault>Logout</a>
-    <span class="welcom">Welcome, @user.Username</span>    
+    <div class="imposter">
+        <a class = "link" @onclick="@(() => Nav.NavigateTo("/decks"))">My Decks</a>
+        <a class = "link" @onclick="Logout" @onclick:preventDefault>Logout</a>
+        <span class="welcome">@user.Username</span>
+    </div>
 }
