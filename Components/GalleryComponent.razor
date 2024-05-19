@@ -1,0 +1,20 @@
+<div>
+    @if (Cards == null)
+    {
+        <p class="loading">Loading...</p>
+    }
+    else
+    {
+        <div class="cards-container">
+        @foreach (var card in Cards)
+        {
+            <div class="card">
+                <CardComponent card="@card" />
+            </div>
+        }
+        </div>
+        <button class="load-more-button" @onclick="OnLoadMore">Load More</button>
+        <p class="@NoMatchingCardsError">@NoMatchingCardsMessage</p>
+        <footer></footer>
+    }
+</div>
