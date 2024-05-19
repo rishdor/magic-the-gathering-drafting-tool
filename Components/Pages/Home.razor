@@ -1,5 +1,4 @@
 ﻿@page "/"
-@inject NavigationManager _nav
 
 <PageTitle>Home</PageTitle>
 
@@ -25,6 +24,6 @@
         <li><b>Play and Conquer:</b> With your drafted deck ready, it's time to test your skills in battles against opponents or challenges.</li>
     </ol>
 
-    <button class="btn" onclick='@(()=>_nav.NavigateTo("/setup"))'>Start drafting</button>
+    <button class="btn" @onclick='EventCallback.Factory.Create(this, Redirect)'>Start draft</button>
 
 </div>
