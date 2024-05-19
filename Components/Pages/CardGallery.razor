@@ -7,23 +7,4 @@
     OnFilter="EventCallback.Factory.Create(this, new Func<CardFilterParameters, Task>(OnFilter))" 
     OnReset="EventCallback.Factory.Create(this, OnReset)" />
 
-<div>
-    @if (cards == null)
-    {
-        <p class="loading">Loading...</p>
-    }
-    else
-    {
-        <div class="cards-container">
-        @foreach (var card in cards)
-        {
-            <div class="card">
-                <CardComponent card="@card" />
-            </div>
-        }
-        </div>
-        <button class="load-more-button" @onclick="LoadMoreCards">Load More</button>
-        <p class="@NoMatchingCardsError">@NoMatchingCardsMessage</p>
-        <footer></footer>
-    }
-</div>
+<GalleryComponent Cards="cards" OnLoadMore="LoadMoreCards" NoMatchingCardsError="@NoMatchingCardsError" NoMatchingCardsMessage="@NoMatchingCardsMessage" />
