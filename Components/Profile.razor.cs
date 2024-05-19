@@ -33,8 +33,11 @@ public partial class Profile
         user = await UserService!.GetUser();
         IsLoggedIn = user != null;
         AppState!.IsUserLoggedIn = IsLoggedIn;
-        AppState.NotifyStateChanged();
-        await InvokeAsync(StateHasChanged);
+        await InvokeAsync(() => 
+        {
+            AppState.NotifyStateChanged();
+            StateHasChanged();
+        });
     }
 
     public async void Logout() 
@@ -43,8 +46,11 @@ public partial class Profile
         user = null;
         IsLoggedIn = false;
         AppState!.IsUserLoggedIn = IsLoggedIn;
-        AppState.NotifyStateChanged();
-        await InvokeAsync(StateHasChanged);
+        await InvokeAsync(() => 
+        {
+            AppState.NotifyStateChanged();
+            StateHasChanged();
+        });
         NavigationManager?.NavigateTo("/");
     }
 

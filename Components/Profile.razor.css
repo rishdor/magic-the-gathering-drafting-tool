@@ -1,0 +1,21 @@
+
+.imposter {
+    display: flex;
+    align-items: left;
+}
+
+.link {
+    color: #69527a;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.link:hover {
+    color: #2c193a;
+}
+
+.welcome {
+    margin-left: auto;
+    color: #69527a;
+    font-weight: bold;
+}
