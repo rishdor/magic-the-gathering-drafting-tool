@@ -4,19 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace magick.Services
 {
-    public class SetService
+    public class SetService(IDbContextFactory<MagickContext> factory)
     {
-        private readonly MagickContext _context;
+        private readonly IDbContextFactory<MagickContext> _factory = factory;
 
-        public SetService(MagickContext context)
+
+        public Set GetSetByCode(string code)
         {
-            _context = context;
+            using MagickContext context = _factory.CreateDbContext();
+            return context.Sets.Find(code)!;
         }
 
-        public async Task<Set> GetSetByCode(string code)
+        public string GetSetName(string? setCode)
         {
-            Set? set = await _context.Sets.FirstOrDefaultAsync(set => set.Code == code);
-            return set!;
+            using MagickContext context = _factory.CreateDbContext();
+            return context.Sets.FirstOrDefault(set => set.Code == setCode)?.Name ?? "";
         }
     }
 }

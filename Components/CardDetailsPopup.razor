@@ -2,59 +2,6 @@
     var showClass = IsVisible ? "d-block" : "d-none";
 }
 
-<style>
-    .toast {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        width: 1000px;
-        height: 600px;
-        border-radius: 10px;
-        opacity: 1;
-        background-color: rgb(231, 231, 231); 
-        display: flex;
-        justify-content: flex-start;
-        font-size: 1.5em;
-        flex-direction: column;
-    }
-
-    .dark-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 9998;
-    }
-
-    .toast-body {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .card-detail {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        align-items: center;
-        gap: 20px;
-    }
-
-    #cardImage {
-        width: 300px;
-        height: 400px;
-        object-fit: contain;
-    }
-
-    .card-detail div {
-        display: grid;
-        gap: 10px;
-    }
-</style>
-
 <div class="dark-overlay @showClass" @onclick="Close">
     <div class="toast-container p-3 @showClass popup" data-bs-autohide="true" data-bs-delay="5000">
         <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -64,14 +11,14 @@
             </div>
             <div class="toast-body">
                 <div class="card-detail">
-                    <img id="cardImage" src="@(_card?.OriginalImageUrl)" alt="@(_card?.Name)"/>
+                    <img id="cardImage" src="@Controller!.GetCardImageUrl()" alt="@Controller.GetCardName()"/>
                     <div>
-                        <p><strong>Mana Cost:</strong> @(_card?.ConvertedManaCost)</p>
-                        <p><strong>Type:</strong> @(_card?.Type)</p>
-                        <p><strong>Rarity Code:</strong> @(_card?.RarityCode)</p>
-                        <p><strong>Set Code:</strong> @(_card?.SetCode)</p>
-                        <p><strong>Set Name:</strong> @(_set?.Name)</p>
-                        <p><strong>Text:</strong> @(_card?.Text)</p>
+                        <p><strong>Mana Cost:</strong> @Controller.GetCardManaCost()</p>
+                        <p><strong>Type:</strong> @Controller.GetCardType()</p>
+                        <p><strong>Rarity:</strong> @Controller.GetCardRarityName()</p>
+                        <p><strong>Set Code:</strong> @Controller.GetCardSetCode()</p>
+                        <p><strong>Set Name:</strong> @Controller.GetSetName()</p>
+                        <p><strong>Text:</strong> @Controller.GetCardText()</p>
                     </div>
                 </div>
             </div>
