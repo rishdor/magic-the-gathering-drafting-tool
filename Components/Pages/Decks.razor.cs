@@ -1,33 +1,25 @@
-using magick.Models.Forms;
-using magick.Services;
-using magick.Models;
 using Microsoft.AspNetCore.Components;
+using magick.Controllers;
+using System.Threading.Tasks;
 
-namespace magick.Components.Pages;
-
-public partial class Decks {
-    [Inject] public DeckService? DeckService { get; set; }
-    [Inject] public UserService? UserService { get; set; }
-    [Inject] public NavigationManager? NavManager { get; set; }
-   
-    private List<UserDeck> decks = [];
-    
-
-    protected override async Task OnInitializedAsync()
+namespace magick.Components.Pages
+{
+    public partial class DecksBase : ComponentBase
     {
-        var user = await UserService!.GetUser();
-        if (user == null)
-        {
-            NavManager!.NavigateTo("/login");
-        }
-        else
-        {
-            await GetDecks();
-        }
-    }
+        [Inject]
+        public DecksController? DecksController { get; set; }
 
-    private async Task GetDecks()
-    {
-        decks = await DeckService!.GetDecks();
+        [Inject]
+        public NavigationManager? NavManager { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await DecksController!.OnInitializedAsync();
+        }
+
+        public void NavigateToSetup()
+        {
+            NavManager!.NavigateTo("/setup");
+        }
     }
 }

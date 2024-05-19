@@ -128,4 +128,17 @@ public class CardService(IDbContextFactory<MagickContext> factory)
     
         return paginatedCards;
     }
+
+    public async Task<Card> GetCardById(long cardId)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        Card? card = await context.Cards.FirstOrDefaultAsync(card => card.Id == cardId);
+        return card!;
+    }
+
+    public string RarityName(string? rarityCode)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        return context.Rarities.FirstOrDefault(rarity => rarity.Code == rarityCode)?.Name ?? "";
+    }
 }

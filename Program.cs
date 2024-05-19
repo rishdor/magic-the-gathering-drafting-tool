@@ -4,6 +4,7 @@ using magick.Models;
 using Microsoft.EntityFrameworkCore;
 using magick.Models.Forms;
 using Microsoft.AspNetCore.Identity;
+using magick.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,10 @@ builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<DraftService>();
 builder.Services.AddScoped<DeckService>();
 builder.Services.AddScoped<SetService>();
-// builder.Services.AddScoped<AppState>();
+builder.Services.AddScoped<CardGalleryController>();
+builder.Services.AddScoped<CardDetailsPopupController>();
+builder.Services.AddScoped<DecksController>();
+
 builder.Services.AddSingleton<AppState>();
 
 builder.Services.AddDbContextFactory<MagickContext>(options =>

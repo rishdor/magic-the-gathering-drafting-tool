@@ -2,9 +2,23 @@
 
 <h1>Card Gallery</h1>
 
-<Filter FilterParameters="currentFilterParameters" 
-    OnSearch="EventCallback.Factory.Create(this, new Func<CardFilterParameters, Task>(OnSearch))" 
-    OnFilter="EventCallback.Factory.Create(this, new Func<CardFilterParameters, Task>(OnFilter))" 
-    OnReset="EventCallback.Factory.Create(this, OnReset)" />
+<Filter FilterParameters="controller!.CurrentFilterParameters" 
+    OnSearch="EventCallback.Factory.Create(this, new Func<CardFilterParameters, Task>(controller.OnSearch))" 
+    OnFilter="EventCallback.Factory.Create(this, new Func<CardFilterParameters, Task>(controller.OnFilter))" 
+    OnReset="EventCallback.Factory.Create(this, controller.OnReset)" />
 
-<GalleryComponent Cards="cards" OnLoadMore="LoadMoreCards" NoMatchingCardsError="@NoMatchingCardsError" NoMatchingCardsMessage="@NoMatchingCardsMessage" />
+@if (controller.IsLoading)
+{
+    <h2 id="loading">Loading...</h2>
+}
+else
+{
+    <GalleryComponent Cards="controller.Cards" OnLoadMore="controller.LoadMoreCards" NoMatchingCardsError="@NoMatchingCardsError" NoMatchingCardsMessage="@NoMatchingCardsMessage" />
+
+    @if (!string.IsNullOrEmpty(NoMatchingCardsError))
+    {
+        <div id="@NoMatchingCardsError">
+            @NoMatchingCardsMessage
+        </div>
+    }
+}

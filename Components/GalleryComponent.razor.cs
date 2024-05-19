@@ -18,5 +18,11 @@ namespace magick.Components
 
         [Parameter]
         public string NoMatchingCardsMessage { get; set; } = "";
+
+        public void UpdateNoMatchingCardsMessage(string error, string message)
+        {
+            NoMatchingCardsError = error;
+            NoMatchingCardsMessage = message;
+        }
     }
 }
