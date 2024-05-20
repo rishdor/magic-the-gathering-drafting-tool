@@ -18,11 +18,11 @@ namespace magick.Components
             _isDisposed = true;
         }
 
-        private async Task CardPopup()
+        private void CardPopup()
         {
             if (!_isDisposed)
             {
-                await popup!.Show(card!.Id);
+                popup!.Show(card!);
             }
         }
     }

@@ -11,14 +11,14 @@
             </div>
             <div class="toast-body">
                 <div class="card-detail">
-                    <img id="cardImage" src="@Controller!.GetCardImageUrl()" alt="@Controller.GetCardName()"/>
+                    <img id="cardImage" src="@(_card?.OriginalImageUrl)" alt="@(_card?.Name)"/>
                     <div>
-                        <p><strong>Mana Cost:</strong> @Controller.GetCardManaCost()</p>
-                        <p><strong>Type:</strong> @Controller.GetCardType()</p>
-                        <p><strong>Rarity:</strong> @Controller.GetCardRarityName()</p>
-                        <p><strong>Set Code:</strong> @Controller.GetCardSetCode()</p>
-                        <p><strong>Set Name:</strong> @Controller.GetSetName()</p>
-                        <p><strong>Text:</strong> @Controller.GetCardText()</p>
+                        <p><strong>Mana Cost:</strong> @(_card?.ConvertedManaCost)</p>
+                        <p><strong>Type:</strong> @(_card?.Type)</p>
+                        <p><strong>Rarity:</strong> @(_rarity?.Name)</p>
+                        <p><strong>Set Code:</strong> @(_card?.SetCode)</p>
+                        <p><strong>Set Name:</strong> @(_set?.Name)</p>
+                        <p><strong>Text:</strong> @(_card?.Text)</p>
                     </div>
                 </div>
             </div>

@@ -32,9 +32,10 @@ public class CardService(IDbContextFactory<MagickContext> factory)
     public async Task<List<Set>> GetSets(string query)
     {
         using MagickContext context = _factory.CreateDbContext();
-        return await (from set in context.Sets
-            where set.Name.ToLower().Contains(query.ToLower())
-            select set).ToListAsync();
+        return await context.Sets
+            .AsNoTracking()
+            .Where(set => EF.Functions.Like(set.Name, $"%{query}%"))
+            .ToListAsync();
     }
 
     public async Task<List<Card>> GetCards(string lastName, int pageSize)
@@ -84,9 +85,9 @@ public class CardService(IDbContextFactory<MagickContext> factory)
     {
         return from card in cardsQuery
                 join set in context.Sets on card.SetCode equals set.Code
-                where card.Name.ToLower().Contains(query.ToLower()) 
-                        || set.Name.ToLower().Contains(query.ToLower())
-                        || set.Code.ToLower().Contains(query.ToLower())
+                where EF.Functions.Like(card.Name, $"%{query}%") 
+                        || EF.Functions.Like(set.Name, $"%{query}%")
+                        || EF.Functions.Like(set.Code, $"%{query}%")
                 select card;
     }
 
@@ -94,8 +95,9 @@ public class CardService(IDbContextFactory<MagickContext> factory)
     {
         using MagickContext context = _factory.CreateDbContext();
         IQueryable<Card> cardsQuery = context.Cards
+            .AsNoTracking()
             .Where(card => !string.IsNullOrEmpty(card.OriginalImageUrl));
-    
+        
         if (convertedManaCost.HasValue)
         {
             cardsQuery = cardsQuery.Where(card => card.ConvertedManaCost == convertedManaCost.ToString());
@@ -134,11 +136,5 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         using MagickContext context = _factory.CreateDbContext();
         Card? card = await context.Cards.FirstOrDefaultAsync(card => card.Id == cardId);
         return card!;
-    }
-
-    public string RarityName(string? rarityCode)
-    {
-        using MagickContext context = _factory.CreateDbContext();
-        return context.Rarities.FirstOrDefault(rarity => rarity.Code == rarityCode)?.Name ?? "";
     }
 }
