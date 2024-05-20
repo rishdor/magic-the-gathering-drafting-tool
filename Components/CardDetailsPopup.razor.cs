@@ -25,18 +25,27 @@ namespace magick.Components
             _isDisposed = true;
         }
         
-        public async Task Show(long cardId)
+        public void PrepareToShow(long cardId)
         {
-            Close();
-            await Controller!.Show(cardId);
-            HeaderText = Controller.GetCardName();
-            IsVisible = true;
+            if (IsVisible)
+            {
+                Close();
+            }
+            Controller!.PrepareToShow(cardId);
             if (!_isDisposed)
             {
                 StateHasChanged();
             }
         }
-        
+
+        public async Task Show()
+        {
+            await Controller!.Show();
+            if (!_isDisposed)
+            {
+                StateHasChanged();
+            }
+        }
         public void Close()
         {
             HeaderText = string.Empty;

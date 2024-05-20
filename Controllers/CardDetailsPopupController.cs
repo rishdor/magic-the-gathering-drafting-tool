@@ -9,17 +9,27 @@ namespace magick.Controllers
         private readonly SetService _setService;
         private readonly CardService _cardService;
         private Card? _card;
-
+        private long? _cardId;
+        public bool IsVisible { get; private set; }
         public CardDetailsPopupController(SetService setService, CardService cardService)
         {
             _setService = setService;
             _cardService = cardService;
         }
 
-        public async Task Show(long cardId)
+        public void PrepareToShow(long cardId)
         {
             Close();
-            _card = await _cardService.GetCardById(cardId);
+            _cardId = cardId;
+        }
+
+        public async Task Show()
+        {
+            if (_cardId.HasValue)
+            {
+                _card = await _cardService.GetCardById(_cardId.Value);
+                IsVisible = true;
+            }
         }
 
         public void Close()
