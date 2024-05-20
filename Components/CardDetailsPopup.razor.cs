@@ -1,13 +1,13 @@
-using System;
-using magick.Controllers;
+using magick.Services;
+using magick.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace magick.Components
 {
-    public partial class CardDetailsPopup : IDisposable
+    public partial class CardDetailsPopup
     {
         [Inject]
-        public CardDetailsPopupController? Controller { get; set; }
+        public SetService? SetService { get; set; }
 
         [Parameter]
         public bool IsVisible { get; set; }
@@ -18,43 +18,27 @@ namespace magick.Components
         [Parameter]
         public string? HeaderText { get; set; }
 
-        private bool _isDisposed = false;
-        
-        public void Dispose()
+        private Card? _card;
+        private Set? _set;
+        private Rarity? _rarity;
+
+        public void Show(Card card)
         {
-            _isDisposed = true;
-        }
-        
-        public void PrepareToShow(long cardId)
-        {
-            if (IsVisible)
-            {
-                Close();
-            }
-            Controller!.PrepareToShow(cardId);
-            if (!_isDisposed)
-            {
-                StateHasChanged();
-            }
+            Close();
+            _card = card;
+            HeaderText = card.Name;
+            _set = SetService!.GetSetByCode(_card.SetCode);
+            _rarity = _card.RarityCode != null ? SetService.GetRarityByCode(_card.RarityCode) : null;
+            IsVisible = true;
+            StateHasChanged();
         }
 
-        public async Task Show()
-        {
-            await Controller!.Show();
-            if (!_isDisposed)
-            {
-                StateHasChanged();
-            }
-        }
         public void Close()
         {
             HeaderText = string.Empty;
             IsVisible = false;
-            Controller!.Close();
-            if (!_isDisposed)
-            {
-                StateHasChanged();
-            }
+            _card = null;
+            StateHasChanged();
         }
     }
 }

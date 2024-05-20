@@ -1,5 +1,5 @@
 <div>
-    <img src="@card?.OriginalImageUrl" alt="@card?.Name" @onclick="PrepareCardPopup" @onmouseover="ShowCardPopup"/>
+    <img src="@card?.OriginalImageUrl" alt="@card?.Name" @onclick="CardPopup"/>
     <p class="card-name">@card?.Name</p>
     <CardDetailsPopup @ref="popup" />
 </div>

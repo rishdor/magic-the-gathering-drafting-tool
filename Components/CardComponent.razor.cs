@@ -9,29 +9,20 @@ namespace magick.Components
     {
         [Parameter]
         public Card? card { get; set; }
-    
         private CardDetailsPopup? popup;
-    
+
         private bool _isDisposed = false;
-    
+
         public void Dispose()
         {
             _isDisposed = true;
         }
-    
-        private void PrepareCardPopup()
-        {
-            if (!_isDisposed && card != null)
-            {
-                popup!.PrepareToShow(card.Id);
-            }
-        }
-    
-        private async Task ShowCardPopup()
+
+        private void CardPopup()
         {
             if (!_isDisposed)
             {
-                await popup!.Show();
+                popup!.Show(card!);
             }
         }
     }

@@ -137,10 +137,4 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         Card? card = await context.Cards.FirstOrDefaultAsync(card => card.Id == cardId);
         return card!;
     }
-
-    public string RarityName(string? rarityCode)
-    {
-        using MagickContext context = _factory.CreateDbContext();
-        return context.Rarities.FirstOrDefault(rarity => rarity.Code == rarityCode)?.Name ?? "";
-    }
 }
