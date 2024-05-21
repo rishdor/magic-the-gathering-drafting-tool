@@ -10,9 +10,37 @@
     <ul>
     @foreach (var deck in DecksController!.GetDecksList())
     {
-        <li>@deck.DeckName</li>
+        <li @onclick="() => OpenPopup(deck)">@deck.DeckName</li>
     }
     </ul>
 
     <button class="btn btn-primary" @onclick='NavigateToSetup'>Create a new deck.</button>
 </div>
+
+@if (showPopup)
+{
+    <div class="popup">
+        <h2>@selectedDeck.DeckName</h2>
+        <p>@selectedDeck.Id</p>
+        @<!-- Todo Get list of cards in the deck_card table with the deck id -->
+
+        <button @onclick="ClosePopup">Close</button>
+    </div>
+}
+
+<!-- todo Move popup to a separate file (component) -->
+@code {
+    bool showPopup = false;
+    UserDeck selectedDeck;
+
+    void OpenPopup(UserDeck deck)
+    {
+        selectedDeck = deck;
+        showPopup = true;
+    }
+
+    void ClosePopup()
+    {
+        showPopup = false;
+    }
+}
