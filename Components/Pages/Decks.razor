@@ -28,7 +28,8 @@
         <p>@selectedDeck.DeckCards.Count</p>
         @foreach (var deckCard in selectedDeck.DeckCards)
         {
-            <img src="@deckCard.Card.OriginalImageUrl">
+            <p>@deckCard.Id</p>
+            <img src="@deckCard?.Card?.OriginalImageUrl">
         }
 
         <button @onclick="ClosePopup">Close</button>

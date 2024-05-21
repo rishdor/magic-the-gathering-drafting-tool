@@ -30,11 +30,17 @@ public class DeckService(
     {
         using MagickContext context = _factory.CreateDbContext();
         User? user = await _userService.GetUser();
-        return (
+        if (user == null)
+    {
+        // Handle the case when user is null, e.g., throw an exception or return an empty list
+        throw new Exception("User is not authenticated");
+    }
+        return await (
             from deck in context.UserDecks
+            .Include(d => d.DeckCards).ThenInclude(dc => dc.Card)
             where deck.UserId == user!.Id
             select deck
-        ).ToList();
+        ).ToListAsync();
     }
 
     public bool DeleteDeck(int deckId)
