@@ -17,18 +17,24 @@
     <button class="btn btn-primary" @onclick='NavigateToSetup'>Create a new deck.</button>
 </div>
 
+
+<!-- todo Move popup to a separate file (component) -->
 @if (showPopup)
 {
     <div class="popup">
         <h2>@selectedDeck.DeckName</h2>
         <p>@selectedDeck.Id</p>
         <!-- Todo Get list of cards in the deck_card table with the deck id -->
+        <p>@selectedDeck.DeckCards.Count</p>
+        @foreach (var deckCard in selectedDeck.DeckCards)
+        {
+            <img src="@deckCard.Card.OriginalImageUrl">
+        }
 
         <button @onclick="ClosePopup">Close</button>
     </div>
 }
 
-<!-- todo Move popup to a separate file (component) -->
 @code {
     bool showPopup = false;
     UserDeck selectedDeck;

@@ -12,6 +12,18 @@ body {
     text-align: center;
 }
 
+.popup {
+    text-align: center;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    background-color: darkgray;
+    border: solid 1px;
+    border-radius: 25px;
+}
+
 h1 {
     color: #69527a;
 }
