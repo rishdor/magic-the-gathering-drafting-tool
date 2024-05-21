@@ -22,17 +22,18 @@
 @if (showPopup)
 {
     <div class="popup">
+
+        <div class="popup-header">
         <h2>@selectedDeck.DeckName</h2>
-        <p>@selectedDeck.Id</p>
-        <!-- Todo Get list of cards in the deck_card table with the deck id -->
-        <p>@selectedDeck.DeckCards.Count</p>
+        <button class="btn-close" @onclick="ClosePopup"></button>
+        </div>
+
+        <div class="popup-content">
         @foreach (var deckCard in selectedDeck.DeckCards)
         {
-            <p>@deckCard.Id</p>
-            <img src="@deckCard?.Card?.OriginalImageUrl">
+            <CardComponent Card="@deckCard.Card" />
         }
-
-        <button @onclick="ClosePopup">Close</button>
+        </div>
     </div>
 }
 

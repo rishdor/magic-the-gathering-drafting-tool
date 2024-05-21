@@ -13,16 +13,37 @@ body {
 }
 
 .popup {
-    text-align: center;
     position: fixed;
     z-index: 1;
     left: 50%;
+    top: 50%;
     width: 60%;
+    height: 80%;
     transform: translate(-50%, -50%);
-    background-color: darkgray;
     border: solid 1px;
     border-radius: 25px;
+    overflow: hidden;
 }
+.popup-header {
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: darkgray;
+}
+.popup-content {
+    padding: 1rem 1rem 1rem 1rem;
+    background-color: lightgray;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
 
 h1 {
     color: #69527a;
