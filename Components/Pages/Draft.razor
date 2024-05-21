@@ -12,9 +12,7 @@
 {
     if (@card.Instance.OriginalImageUrl is not null)
     {
-        <li>
         <img src="@card.Instance.OriginalImageUrl" @onclick="@(_ => AddCardToDeck(card.Tag))">
-        </li>
     }
 }
 </ul>
