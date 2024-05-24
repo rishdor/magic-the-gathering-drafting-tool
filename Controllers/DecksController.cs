@@ -10,6 +10,7 @@ namespace magick.Controllers
         private readonly DeckService _deckService;
         private readonly UserService _userService;
         private List<UserDeck> _decks = new List<UserDeck>();
+        private Boolean _isLoading = false;
 
         public DecksController(DeckService deckService, UserService userService)
         {
@@ -19,11 +20,13 @@ namespace magick.Controllers
 
         public async Task OnInitializedAsync()
         {
+            _isLoading = true;
             var user = await _userService.GetUser();
             if (user != null)
             {
                 await GetDecks();
             }
+            _isLoading = false;
         }
 
         public async Task GetDecks()
@@ -34,6 +37,10 @@ namespace magick.Controllers
         public List<UserDeck> GetDecksList()
         {
             return _decks;
+        }
+        public Boolean IsLoading()
+        {
+            return _isLoading;
         }
     }
 }
