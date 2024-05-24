@@ -18,21 +18,7 @@
 </div>
 
 
-<!-- todo Move popup to a separate file (component) -->
 @if (showPopup)
 {
-    <div class="popup">
-
-        <div class="popup-header">
-        <h2>@selectedDeck.DeckName</h2>
-        <button class="btn-close" @onclick="ClosePopup"></button>
-        </div>
-
-        <div class="popup-content">
-        @foreach (var deckCard in selectedDeck.DeckCards)
-        {
-            <CardComponent Card="@deckCard.Card" />
-        }
-        </div>
-    </div>
+    <DeckPopupComponent SelectedDeck="selectedDeck" ClosePopup="ClosePopup" />
 }

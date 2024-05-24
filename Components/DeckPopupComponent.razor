@@ -1,0 +1,21 @@
+@code {
+    [Parameter]
+    public UserDeck SelectedDeck { get; set; }
+
+    [Parameter]
+    public EventCallback ClosePopup { get; set; }
+}
+
+<div class="popup">
+    <div class="popup-header">
+        <h2>@SelectedDeck.DeckName</h2>
+        <button class="btn-close" @onclick="ClosePopup"></button>
+    </div>
+
+    <div class="popup-content">
+        @foreach (var deckCard in SelectedDeck.DeckCards)
+        {
+            <CardComponent Card="@deckCard.Card" />
+        }
+    </div>
+</div>
