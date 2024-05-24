@@ -7,15 +7,18 @@
 <button @onclick="OpenPack">Open next booster pack</button>
 
 <h3>Table</h3>
-<ul>
 @foreach (var card in table)
 {
     if (@card.Instance.OriginalImageUrl is not null)
     {
-        <img src="@card.Instance.OriginalImageUrl" @onclick="@(_ => AddCardToDeck(card.Tag))">
+        <div class="draft-card">
+        <CardComponent card="@card.Instance"/>
+        <button @onclick="@(_ => AddCardToDeck(card.Tag))">Add to deck</button>
+        </div>
     }
 }
-</ul>
+
+
 
 <h3>Deck</h3>
 <ul>
