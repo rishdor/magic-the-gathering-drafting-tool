@@ -34,7 +34,7 @@ public class CardService(IDbContextFactory<MagickContext> factory)
         using MagickContext context = _factory.CreateDbContext();
         return await context.Sets
             .AsNoTracking()
-            .Where(set => EF.Functions.Like(set.Name, $"%{query}%"))
+            .Where(set => EF.Functions.ILike(set.Name, $"%{query}%"))
             .ToListAsync();
     }
 

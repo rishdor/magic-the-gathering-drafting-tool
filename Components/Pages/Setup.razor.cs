@@ -1,34 +1,36 @@
 using magick.Models.Forms;
-using magick.Services;
-using magick.Models;
 using Microsoft.AspNetCore.Components;
+using magick.Controllers;
+using magick.Models;
 
-namespace magick.Components.Pages;
-
-public partial class Setup {
-    [Inject] public CardService? CardService { get; set; }
-    [Inject] public UserService? UserService { get; set; }
-    [Inject] public NavigationManager? NavManager { get; set; }
-   
-    [SupplyParameterFromForm] public SetQuery Query { get; set; } = new();
-
-    private List<Set> sets = [];
-    
-    protected override async Task OnInitializedAsync()
+namespace magick.Components.Pages
+{
+    public partial class Setup
     {
-        var user = await UserService!.GetUser();
-        if (user == null)
+        [Inject] public SetupController? SetupController { get; set; }
+        [Inject] public NavigationManager? NavManager { get; set; }
+
+        [Parameter] public SetQuery Query { get; set; } = new();
+
+        private List<Set> sets = [];
+
+        protected override async Task OnInitializedAsync()
         {
-            NavManager!.NavigateTo("/login");
-        }
-        else
-        {
-            await FilterSets();
+            var user = await SetupController!.GetUser();
+            if (user == null)
+            {
+                NavManager!.NavigateTo("/login");
+            }
+            else
+            {
+                await FilterSets();
+            }
         }
 
-    }
-    private async Task FilterSets()
-    {
-        sets = await CardService!.GetSets(Query.Text);
+        private async Task FilterSets()
+        {
+            await SetupController!.FilterSets(Query);
+            sets = SetupController.GetSets();
+        }
     }
 }

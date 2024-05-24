@@ -13,7 +13,7 @@ namespace magick.Components.Pages
         [Inject]
         public NavigationManager? NavManager { get; set; }
         protected bool showPopup = false;
-        protected UserDeck selectedDeck;
+        protected UserDeck? selectedDeck;
 
         protected override async Task OnInitializedAsync()
         {

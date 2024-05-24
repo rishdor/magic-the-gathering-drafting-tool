@@ -21,18 +21,31 @@
     background-color: #EEEEEE;
 }
 
-.btn-primary {
-    background-color: #69527a;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 5px;
+.search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 20px 0;
 }
 
-.btn-primary:hover {
-    background-color: #573f64;
+.search-btn{
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #69527a;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+}
+
+.search-btn:hover {
+    background-color: #4d3a57;
+}
+
+h1 {
+    color: #69527a;
 }
 
 input[type="text"] {

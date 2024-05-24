@@ -2,13 +2,14 @@
 
 <PageTitle>Setup</PageTitle>
 
-<h1>Select your set</h1>
+<div class="search">
+    <h1>Select your set</h1>
 
-<EditForm Model="Query" OnValidSubmit="FilterSets">
-    <input type="text" id="set-filter" name="set-filter" placeholder="Search" @bind="Query.Text">
-    <input type="submit" value="Search" class="btn btn-primary"/>
-</EditForm>
-
+    <EditForm Model="Query" OnValidSubmit="FilterSets">
+        <input type="text" id="set-filter" name="set-filter" placeholder="Search" @bind="Query.Text">
+        <input class = "search-btn" type="submit" value="Search" />
+    </EditForm>
+</div>
 <div id="sets">
     @if(string.IsNullOrEmpty(Query.Text) && sets.Count == 0)
     {

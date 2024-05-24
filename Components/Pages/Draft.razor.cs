@@ -1,52 +1,51 @@
 using magick.Models;
-using magick.Services;
+using magick.Controllers;
 using Microsoft.AspNetCore.Components;
 
-namespace magick.Components.Pages;
-
-public partial class Draft
+namespace magick.Components.Pages
 {
-    [Inject] public DraftService? DraftService { get; set; }
-    [Inject] public NavigationManager? Navigation { get; set; }
-    [Parameter] public string? SetCode { get; set; }
-
-    private List<Tagged<Card>> table = [];
-    private List<Tagged<Card>> deck = [];
-    private string deckName = "";
-
-
-    protected override void OnInitialized()
+    public partial class Draft
     {
-        DraftService!.StartDraft(SetCode!);
-        table = DraftService!.GetTable();
-        deck  = DraftService!.GetDeck();
-    }
+        [Inject] public DraftController? DraftController { get; set; }
+        [Inject] public NavigationManager? Navigation { get; set; }
+        [Parameter] public string? SetCode { get; set; }
 
+        private List<Tagged<Card>> table = [];
+        private List<Tagged<Card>> deck = [];
+        private string deckName = "";
 
-    private void OpenPack()
-    {
-        DraftService!.OpenPack();
-        table = DraftService!.GetTable();
-        deck  = DraftService!.GetDeck();
-    }
+        protected override void OnInitialized()
+        {
+            DraftController!.StartDraft(SetCode!);
+            table = DraftController!.GetTable();
+            deck  = DraftController!.GetDeck();
+        }
 
-    private void AddCardToDeck(Guid cardUid)
-    {
-        DraftService!.AddCardToDeck(cardUid);
-        table = DraftService!.GetTable();
-        deck  = DraftService!.GetDeck();
-    }
+        private void OpenPack()
+        {
+            DraftController!.OpenPack();
+            table = DraftController!.GetTable();
+            deck  = DraftController!.GetDeck();
+        }
 
-    private void RemoveCardFromDeck(Guid cardUid)
-    {
-        DraftService!.RemoveCardFromDeck(cardUid);
-        table = DraftService!.GetTable();
-        deck  = DraftService!.GetDeck();
-    }
+        private void AddCardToDeck(Guid cardUid)
+        {
+            DraftController!.AddCardToDeck(cardUid);
+            table = DraftController!.GetTable();
+            deck  = DraftController!.GetDeck();
+        }
 
-    private void FinishDraft()
-    {
-        DraftService!.FinishDraft(deckName);
-        Navigation!.NavigateTo("/decks");
+        private void RemoveCardFromDeck(Guid cardUid)
+        {
+            DraftController!.RemoveCardFromDeck(cardUid);
+            table = DraftController!.GetTable();
+            deck  = DraftController!.GetDeck();
+        }
+
+        private void FinishDraft()
+        {
+            DraftController!.FinishDraft(deckName);
+            Navigation!.NavigateTo("/decks");
+        }
     }
 }
