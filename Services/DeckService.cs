@@ -12,7 +12,7 @@ public class DeckService(
     private readonly IDbContextFactory<MagickContext> _factory = factory;
     private readonly UserService _userService = userService;
 
-    public List<Card> GetCards(int deckId)
+    public List<Card?> GetCards(int deckId)
     {
         using MagickContext context = _factory.CreateDbContext();
         return (
@@ -53,12 +53,58 @@ public class DeckService(
 
         if (deck != null)
         {
-            List<Card> cards = GetCards(deckId);
-            context.Cards.RemoveRange(cards);
+            List<Card?> cards = GetCards(deckId);
+            context.Cards.RemoveRange(cards!);
             context.UserDecks.Remove(deck);
         }
         
         context.SaveChanges();
         return deck != null;
+    }
+
+    public List<Card?> SearchCardInDeck(int deckId, string query)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        var cards = GetCards(deckId);
+    
+        if (!string.IsNullOrEmpty(query))
+        {
+            cards = (from card in cards
+                     join set in context.Sets on card.SetCode equals set.Code
+                     where card.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                           set.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                           set.Code.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     select card).ToList();
+        }
+    
+        return cards ?? new List<Card?>();
+    }
+
+    public List<Card?> FilterCardsInDeck(int deckId, string query, int? convertedManaCost = null, string? type = null, string? rarityCode = null, string? color = null)
+    {
+        using MagickContext context = _factory.CreateDbContext();
+        var cards = GetCards(deckId);
+    
+        if (convertedManaCost.HasValue)
+        {
+            cards = cards?.Where(card => card!.ConvertedManaCost == convertedManaCost.ToString()).ToList();
+        }
+    
+        if (!string.IsNullOrEmpty(type))
+        {
+            cards = cards?.Where(card => card!.CardTypes.Any(ct => ct.Type.Name == type)).ToList();
+        }
+    
+        if (!string.IsNullOrEmpty(rarityCode))
+        {
+            cards = cards?.Where(card => card!.RarityCode == rarityCode).ToList();
+        }
+    
+        if (!string.IsNullOrEmpty(color))
+        {
+            cards = cards?.Where(card => card!.CardColors.Any(cc => cc.Color.Name == color)).ToList();
+        }
+    
+        return cards?.OrderBy(card => card!.Name).ToList() ?? new List<Card?>();
     }
 }
