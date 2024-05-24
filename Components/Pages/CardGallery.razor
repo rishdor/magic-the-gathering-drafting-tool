@@ -15,7 +15,7 @@
 }
 else
 {
-    <GalleryComponent Cards="controller.Cards" OnLoadMore="controller.LoadMoreCards" NoMatchingCardsError="@NoMatchingCardsError" NoMatchingCardsMessage="@NoMatchingCardsMessage" />
+    <GalleryComponent Cards="controller.Cards" OnLoadMore="controller.LoadMoreCards" NoMatchingCardsError="@NoMatchingCardsError" NoMatchingCardsMessage="@NoMatchingCardsMessage" ShowLoadMoreButton=true/>
 
     @if (!string.IsNullOrEmpty(NoMatchingCardsError))
     {

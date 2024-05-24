@@ -13,7 +13,10 @@
             </div>
         }
         </div>
-        <button class="load-more-button" @onclick="OnLoadMore">Load More</button>
+        @if (ShowLoadMoreButton)
+        {
+            <button class="load-more-button" @onclick="OnLoadMore">Load More</button>
+        }
         <p class="@NoMatchingCardsError">@NoMatchingCardsMessage</p>
         <footer></footer>
     }
