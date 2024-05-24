@@ -1,43 +1,45 @@
 @page "/draft/{SetCode}"
 
 <PageTitle>Draft</PageTitle>
-
-<h1>Draft</h1>
-
-<button class="btn" @onclick="OpenPack">@((table.Count == 0) ? "Open your first booster pack" : "Open next booster pack")</button>
-
+<div class="header">
+    <h1>Draft</h1>
+    <button class="btn-draft" @onclick="OpenPack">@((table.Count == 0) ? "Open your first booster pack" : "Open next booster pack")</button>
+</div>
 @if (table.Count > 0)
 {
-    <h3>Table</h3>
-    @foreach (var card in table)
-    {
-        if (@card.Instance.OriginalImageUrl is not null)
+    <div class="cards-container">
+        @foreach (var card in table)
         {
-            <div class="draft-card">
-            <CardComponent card="@card.Instance"/>
-            <button class="btn" @onclick="@(_ => AddCardToDeck(card.Tag))">Add to deck</button>
-            </div>
+            if (@card.Instance.OriginalImageUrl is not null)
+            {
+                <div class="draft-card">
+                <CardComponent card="@card.Instance"/>
+                <button class="btn" @onclick="@(_ => AddCardToDeck(card.Tag))">Add to deck</button>
+                </div>
+            }
         }
-    }
+    </div>
 
-    <h3>Deck</h3>
+    <h1>Deck</h1>
     @if (deck.Count == 0)
     {
         <p>Your deck is empty.</p>
     }
 
-
-    @foreach (var card in deck)
-    {
-        <div class="draft-card">
-            <CardComponent card="@card.Instance"/>
-            <button class="btn remove-btn" @onclick="@(_ => RemoveCardFromDeck(card.Tag))">Remove card</button>
-        </div>
-    }
+    <div class="cards-container">
+        @foreach (var card in deck)
+        {
+            <div class="draft-card">
+                <CardComponent card="@card.Instance"/>
+                <button class="btn remove-btn" @onclick="@(_ => RemoveCardFromDeck(card.Tag))">Remove card</button>
+            </div>
+        }
+    </div>
 
     <div class="save-deck">
         <label>Deck Name:</label>
         <input @bind="deckName" />
-        <button @onclick="FinishDraft">Finish Draft</button>
+        <button class= "btn-draft" @onclick="FinishDraft">Save the deck</button>
     </div>
+    <footer></footer>
 }

@@ -24,7 +24,7 @@
     <div class="popup">
 
         <div class="popup-header">
-        <h2>@selectedDeck.DeckName</h2>
+        <h2>@selectedDeck!.DeckName</h2>
         <button class="btn-close" @onclick="ClosePopup"></button>
         </div>
 
@@ -39,7 +39,7 @@
 
 @code {
     bool showPopup = false;
-    UserDeck selectedDeck;
+    UserDeck? selectedDeck;
 
     void OpenPopup(UserDeck deck)
     {
