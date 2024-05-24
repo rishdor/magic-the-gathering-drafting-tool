@@ -25,6 +25,7 @@ public partial class Setup {
         {
             await FilterSets();
         }
+
     }
     private async Task FilterSets()
     {
