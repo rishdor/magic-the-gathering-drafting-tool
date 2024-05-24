@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using magick.Controllers;
 using System.Threading.Tasks;
+using magick.Models;
 
 namespace magick.Components.Pages
 {
@@ -11,6 +12,8 @@ namespace magick.Components.Pages
 
         [Inject]
         public NavigationManager? NavManager { get; set; }
+        protected bool showPopup = false;
+        protected UserDeck selectedDeck;
 
         protected override async Task OnInitializedAsync()
         {
@@ -20,6 +23,16 @@ namespace magick.Components.Pages
         public void NavigateToSetup()
         {
             NavManager!.NavigateTo("/setup");
+        }
+        public void OpenPopup(UserDeck deck)
+        {
+            selectedDeck = deck;
+            showPopup = true;
+        }
+
+        public void ClosePopup()
+        {
+            showPopup = false;
         }
     }
 }

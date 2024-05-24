@@ -36,19 +36,3 @@
         </div>
     </div>
 }
-
-@code {
-    bool showPopup = false;
-    UserDeck selectedDeck;
-
-    void OpenPopup(UserDeck deck)
-    {
-        selectedDeck = deck;
-        showPopup = true;
-    }
-
-    void ClosePopup()
-    {
-        showPopup = false;
-    }
-}
