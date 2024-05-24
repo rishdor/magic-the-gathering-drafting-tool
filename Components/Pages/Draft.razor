@@ -4,7 +4,7 @@
 
 <h1>Draft</h1>
 
-<button class="btn" @onclick="OpenPack">Open next booster pack</button>
+<button class="btn" @onclick="OpenPack">@((table.Count == 0) ? "Open your first booster pack" : "Open next booster pack")</button>
 
 <h3>Table</h3>
 @foreach (var card in table)
