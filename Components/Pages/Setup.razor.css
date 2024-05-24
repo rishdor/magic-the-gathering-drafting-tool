@@ -40,6 +40,18 @@
     text-align: center;
 }
 
+.search-btn:hover {
+    background-color: #4d3a57;
+}
+
 h1 {
     color: #69527a;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
 }

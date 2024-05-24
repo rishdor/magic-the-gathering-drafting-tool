@@ -7,6 +7,17 @@
 <div class="container">
     <h1>Decks</h1>
 
+    @if (DecksController!.IsLoading() && DecksController!.GetDecksList().Count == 0)
+    {
+        <p>Loading your decks.</p>
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only"></span>
+        </div>
+    } else if (DecksController!.GetDecksList().Count == 0)
+    {
+        <p>You don't have any decks yet.</p>
+    }
+
     <ul>
     @foreach (var deck in DecksController!.GetDecksList())
     {
@@ -18,37 +29,7 @@
 </div>
 
 
-<!-- todo Move popup to a separate file (component) -->
 @if (showPopup)
 {
-    <div class="popup">
-
-        <div class="popup-header">
-        <h2>@selectedDeck!.DeckName</h2>
-        <button class="btn-close" @onclick="ClosePopup"></button>
-        </div>
-
-        <div class="popup-content">
-        @foreach (var deckCard in selectedDeck.DeckCards)
-        {
-            <CardComponent Card="@deckCard.Card" />
-        }
-        </div>
-    </div>
-}
-
-@code {
-    bool showPopup = false;
-    UserDeck? selectedDeck;
-
-    void OpenPopup(UserDeck deck)
-    {
-        selectedDeck = deck;
-        showPopup = true;
-    }
-
-    void ClosePopup()
-    {
-        showPopup = false;
-    }
+    <DeckPopupComponent SelectedDeck="selectedDeck" ClosePopup="ClosePopup" />
 }
