@@ -4,7 +4,7 @@
 
 <h1>Draft</h1>
 
-<button @onclick="OpenPack">Open next booster pack</button>
+<button class="btn" @onclick="OpenPack">Open next booster pack</button>
 
 <h3>Table</h3>
 @foreach (var card in table)
@@ -13,12 +13,10 @@
     {
         <div class="draft-card">
         <CardComponent card="@card.Instance"/>
-        <button @onclick="@(_ => AddCardToDeck(card.Tag))">Add to deck</button>
+        <button class="btn" @onclick="@(_ => AddCardToDeck(card.Tag))">Add to deck</button>
         </div>
     }
 }
-
-
 
 <h3>Deck</h3>
 <ul>

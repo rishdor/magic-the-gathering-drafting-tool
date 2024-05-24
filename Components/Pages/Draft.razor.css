@@ -1,0 +1,10 @@
+.draft-card {
+    display: inline-block;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    text-align: center;
+}
+
+button {
+    background-color: #69527a;
+    color: white;
+}
