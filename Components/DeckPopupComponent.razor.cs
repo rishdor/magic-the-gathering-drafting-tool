@@ -15,7 +15,7 @@ namespace magick.Components
         public EventCallback ClosePopup { get; set; }
 
         [Inject]
-        protected CardGalleryController? controller { get; set; }
+        protected DeckCardsController? controller { get; set; }
 
         protected override void OnInitialized()
         {
