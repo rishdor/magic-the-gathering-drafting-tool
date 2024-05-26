@@ -24,12 +24,12 @@ namespace magick.Components
 
         protected void LoadDeckCards()
         {
-            var moreCards = controller!.LoadDeckCards(SelectedDeck!.Id);
+            var cards = controller!.LoadDeckCards(SelectedDeck!.Id);
         }
 
         protected void OnSearch(CardFilterParameters parameters)
         {
-            var cards = controller!.LoadDeckCards(SelectedDeck!.Id);
+            var cards = controller!.OnSearchDeck(SelectedDeck!.Id, parameters);
         }
         
         protected void OnFilter(CardFilterParameters parameters)
