@@ -29,7 +29,7 @@ namespace magick.Components
 
         protected void OnSearch(CardFilterParameters parameters)
         {
-            var cards = controller!.OnSearchDeck(SelectedDeck!.Id, parameters);
+            var cards = controller!.LoadDeckCards(SelectedDeck!.Id);
         }
         
         protected void OnFilter(CardFilterParameters parameters)
