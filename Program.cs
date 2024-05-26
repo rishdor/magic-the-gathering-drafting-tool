@@ -22,6 +22,7 @@ builder.Services.AddScoped<CardGalleryController>();
 builder.Services.AddScoped<DecksController>();
 builder.Services.AddScoped<SetupController>();
 builder.Services.AddScoped<DraftController>();
+builder.Services.AddScoped<DeckCardsController>();
 
 builder.Services.AddSingleton<AppState>();
 
