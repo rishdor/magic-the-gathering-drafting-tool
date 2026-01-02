@@ -1,26 +1,23 @@
 # Magic: The Gathering Drafting Tool
 
-## Overview
-This project is a drafting tool for Magic the Gathering (MTG). It allows users to access all the cards in MTG, filter and search cards, and see detailed information about each card. Users can also create their own accounts and save their custom decks for later use.
+**Tech stack:** .NET, C#, Entity Framework, Blazor
 
-## Technology Stack
-This application is built using **.NET**, **Entity Framework**, **Blazor**, and **C#**. It follows a layered architecture for clean and efficient code organization. The project was primarily developed on GitLab and is now being moved to GitHub for portfolio purposes.
+This project is a web-based drafting tool for Magic: The Gathering. It allows users to browse and search the full MTG card database, view detailed card information, and create custom decks linked to user accounts.
 
 ## Features
+- Browse and search the full MTG card database
+- View detailed card information
+- User accounts with authenticated sessions
+- Create and manage custom decks
+- Persist decks per user account
 
-### 1. Access to All MTG Cards
-- Browse the entire Magic: The Gathering card database.
-- Filter and search for specific cards.
-- View detailed information of each card on click.
+## My Contribution
+- Implemented user authentication.
+- Designed and implemented backend logic for card browsing and filtering
+- Built the card gallery feature and related UI components
+- Contributed to API integration and data persistence
 
-### 2. User Accounts and Sessions
-- Create your own account to personalize your experience.
-- Each user session allows for customized deck management.
-
-### 3. Deck Creation and Management
-- Logged-in users can create their own decks from chosen card sets.
-- Save decks to your account for easy access later.
-- Filter and search within your decks.
+This project was developed as a group project during university studies. The repository has been migrated to GitHub for portfolio purposes.
 
 ## Screenshots
 ![Screenshot 2024-05-27 215859](https://github.com/rishdor/magic-the-gathering-drafting-tool/assets/66086647/87681f0d-2ecb-4fd9-a01d-dbb57d3db2db)
@@ -28,5 +25,3 @@ This application is built using **.NET**, **Entity Framework**, **Blazor**, and 
 ![Screenshot 2024-05-27 220125](https://github.com/rishdor/magic-the-gathering-drafting-tool/assets/66086647/0d28b14f-a6f3-411c-b261-85c52652aaeb)
 ![Screenshot 2024-05-27 220156](https://github.com/rishdor/magic-the-gathering-drafting-tool/assets/66086647/935a5611-920b-4c64-82da-2f1049c28974)
 ![image](https://github.com/rishdor/magic-the-gathering-drafting-tool/assets/66086647/7e792005-a7b2-4b1a-987b-84bf78a01ca9)
-
-
